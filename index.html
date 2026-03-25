@@ -579,6 +579,38 @@ body {
 }
 .targeting-card-warn::before { content: '⚠ '; }
 
+/* Role Targeting tables (converted from card grid) */
+.targeting-table-wrap {
+  background: var(--border-light);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  overflow: hidden;
+}
+.targeting-role-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+}
+.targeting-role-table th,
+.targeting-role-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+  font-size: 13px;
+}
+.targeting-role-table tr:last-child td { border-bottom: none; }
+.targeting-role-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: var(--bg-subtle);
+}
+.targeting-role { font-weight: 800; color: var(--text-primary); width: 34%; }
+.targeting-best { color: var(--success); font-weight: 700; width: 36%; }
+.targeting-watch { color: var(--danger); }
+
 .positioning-callout {
   background: linear-gradient(135deg, #f0fdf4, #dcfce7);
   border: 1px solid #86efac; border-radius: var(--radius-lg);
@@ -895,6 +927,38 @@ body {
 .tech-tag {
   display: inline-block; font-size: 11px; font-weight: 700;
   padding: 3px 9px; border-radius: var(--radius-sm); margin-bottom: 8px;
+}
+
+/* ─────────────────────────────────────────────
+   Tech Reference Extension Hooks (Optional Media)
+   These slots are hidden by default so current visuals stay identical.
+   To add an image later, set `data-img=".../file.png"` on the slot.
+───────────────────────────────────────────── */
+.techref-concept-media-slot {
+  display: none;
+  margin-bottom: 8px;
+  width: 100%;
+}
+.techref-concept-media-slot img {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  object-fit: cover;
+  max-height: 260px;
+}
+.techref-card-media-slot {
+  display: none;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.techref-card-media-slot img {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  object-fit: cover;
+  max-height: 260px;
 }
 .maturity-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .maturity-table th {
@@ -1983,32 +2047,43 @@ footer {
       <div class="legend-dot" style="background:#10b981"></div>
       Strong Fit — Lead with these
     </div>
-    <div class="targeting-cards">
-      <div class="targeting-card">
-        <div class="targeting-card-title">Sr. Director of Software Engineering</div>
-        <div class="targeting-card-best">Best angle: Platform leadership + AI-enabled SDLC + org scaling</div>
-        <div class="targeting-card-warn">Watch: Ensure current SWE scope is front and center</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Sr. Director of Engineering — Regulated Platforms</div>
-        <div class="targeting-card-best">Best angle: Compliance-by-design + FDA/IEC 62304 + zero findings track record</div>
-        <div class="targeting-card-warn">Watch: Don't let QE framing overshadow engineering depth</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Sr. Director of AI & Platform Engineering</div>
-        <div class="targeting-card-best">Best angle: AI policy + SDLC intelligence + AI-native org design</div>
-        <div class="targeting-card-warn">Watch: Quantify AI impact in business terms, not just technical</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">VP of Engineering — Biotech / Life Sciences</div>
-        <div class="targeting-card-best">Best angle: 10 years regulated-domain depth, SDLC Council governance, $6M+ org</div>
-        <div class="targeting-card-warn">Watch: VP requires stronger business case / financial fluency narrative</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Director of Engineering Governance & Compliance</div>
-        <div class="targeting-card-best">Best angle: SDLC Council, policy-as-code, continuous audit readiness</div>
-        <div class="targeting-card-warn">Watch: This is a step down — use as a bridgehead if the company is strategic</div>
-      </div>
+    <div class="targeting-table-wrap">
+      <table class="targeting-role-table" role="table" aria-label="Strong Fit roles">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Best angle</th>
+            <th>Watch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="targeting-role">Sr. Director of Software Engineering</td>
+            <td class="targeting-best">Platform leadership + AI-enabled SDLC + org scaling</td>
+            <td class="targeting-watch">Ensure current SWE scope is front and center</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Sr. Director of Engineering — Regulated Platforms</td>
+            <td class="targeting-best">Compliance-by-design + FDA/IEC 62304 + zero findings track record</td>
+            <td class="targeting-watch">Don't let QE framing overshadow engineering depth</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Sr. Director of AI & Platform Engineering</td>
+            <td class="targeting-best">AI policy + SDLC intelligence + AI-native org design</td>
+            <td class="targeting-watch">Quantify AI impact in business terms, not just technical</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">VP of Engineering — Biotech / Life Sciences</td>
+            <td class="targeting-best">10 years regulated-domain depth, SDLC Council governance, $6M+ org</td>
+            <td class="targeting-watch">VP requires stronger business case / financial fluency narrative</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Director of Engineering Governance & Compliance</td>
+            <td class="targeting-best">SDLC Council, policy-as-code, continuous audit readiness</td>
+            <td class="targeting-watch">This is a step down — use as a bridgehead if the company is strategic</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -2018,22 +2093,33 @@ footer {
       <div class="legend-dot" style="background:#f59e0b"></div>
       Possible — Requires Framing
     </div>
-    <div class="targeting-cards">
-      <div class="targeting-card">
-        <div class="targeting-card-title">Head of Quality Engineering / QE VP</div>
-        <div class="targeting-card-best">Best angle: Built QE from 0 → 55 FTEs; QE as strategic accelerator, not bottleneck</div>
-        <div class="targeting-card-warn">Watch: Frame as platform leadership, not just quality oversight</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Sr. Director of DevSecOps / Platform Engineering</div>
-        <div class="targeting-card-best">Best angle: CI/CD golden paths, policy-as-code, compliance automation</div>
-        <div class="targeting-card-warn">Watch: Emphasize platform infra depth — may need to highlight hands-on tooling more</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Chief of Staff to CTO / Technical COO</div>
-        <div class="targeting-card-best">Best angle: Governance, cross-functional alignment, executive presence</div>
-        <div class="targeting-card-warn">Watch: Clarify scope — this could limit growth ceiling</div>
-      </div>
+    <div class="targeting-table-wrap">
+      <table class="targeting-role-table" role="table" aria-label="Possible roles">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Best angle</th>
+            <th>Watch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="targeting-role">Head of Quality Engineering / QE VP</td>
+            <td class="targeting-best">Built QE from 0 → 55 FTEs; QE as strategic accelerator, not bottleneck</td>
+            <td class="targeting-watch">Frame as platform leadership, not just quality oversight</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Sr. Director of DevSecOps / Platform Engineering</td>
+            <td class="targeting-best">CI/CD golden paths, policy-as-code, compliance automation</td>
+            <td class="targeting-watch">Emphasize platform infra depth — may need to highlight hands-on tooling more</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Chief of Staff to CTO / Technical COO</td>
+            <td class="targeting-best">Governance, cross-functional alignment, executive presence</td>
+            <td class="targeting-watch">Clarify scope — this could limit growth ceiling</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -2043,17 +2129,33 @@ footer {
       <div class="legend-dot" style="background:#ef4444"></div>
       Avoid — Wrong Lane
     </div>
-    <div class="targeting-cards">
-      <div class="targeting-card">
-        <div class="targeting-card-title">QA Manager / Test Lead Roles</div>
-        <div class="targeting-card-best">—</div>
-        <div class="targeting-card-warn">Too junior — your story is Sr. Director level; this would be 3–4 levels down</div>
-      </div>
-      <div class="targeting-card">
-        <div class="targeting-card-title">Pure Product VP / Sales-Led Roles</div>
-        <div class="targeting-card-best">—</div>
-        <div class="targeting-card-warn">Wrong lane — your story is engineering + platform + transformation, not product growth or sales</div>
-      </div>
+    <div class="targeting-table-wrap">
+      <table class="targeting-role-table" role="table" aria-label="Avoid roles">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Best angle</th>
+            <th>Watch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="targeting-role">QA Manager / Test Lead Roles</td>
+            <td class="targeting-best">—</td>
+            <td class="targeting-watch">Too junior — your story is Sr. Director level; this would be 3–4 levels down</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">Pure Product VP / Sales-Led Roles</td>
+            <td class="targeting-best">—</td>
+            <td class="targeting-watch">Wrong lane — your story is engineering + platform + transformation, not product growth or sales</td>
+          </tr>
+          <tr>
+            <td class="targeting-role">CTO / Chief Technology Officer</td>
+            <td class="targeting-best">—</td>
+            <td class="targeting-watch">Too senior — this is ~2 levels up from VP/Sr. Director positioning</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -2916,67 +3018,134 @@ footer {
         <table class="techref-table">
           <thead><tr><th>Pattern / Style</th><th>Definition</th><th>Key Benefits</th><th>Watch-Outs</th></tr></thead>
           <tbody>
-            <tr><td>Microservices</td><td>Application built as a suite of small, independently deployable services</td><td>Independent scaling, team autonomy, technology flexibility</td><td>Operational complexity, distributed tracing, network latency</td></tr>
-            <tr><td>Monolith</td><td>Single deployable unit — all modules in one codebase</td><td>Simpler dev/test, no network calls, easier initial delivery</td><td>Scaling bottlenecks, deployment risk, coupling between modules</td></tr>
-            <tr><td>Event-Driven Architecture</td><td>Components communicate via events (asynchronous messages), not direct calls</td><td>Decoupling, resilience, real-time processing, audit trail</td><td>Eventual consistency, debugging complexity, dead-letter handling</td></tr>
-            <tr><td>API-First</td><td>Every capability exposed as a well-defined API before implementation begins</td><td>Reusability, composability, enables partner ecosystems</td><td>Requires upfront contract discipline; versioning overhead</td></tr>
-            <tr><td>CQRS</td><td>Command Query Responsibility Segregation — separate read and write models</td><td>Optimized read performance, scales reads independently, clear audit trail</td><td>Eventual consistency, added code complexity</td></tr>
-            <tr><td>Serverless</td><td>Run code without managing servers — function-level billing and scale</td><td>Zero ops overhead, cost-efficient for bursty workloads, rapid deployment</td><td>Cold starts, vendor lock-in, debugging complexity</td></tr>
-            <tr><td>Domain-Driven Design (DDD)</td><td>Align software design with business domain — bounded contexts, aggregates, ubiquitous language</td><td>Reduces complexity, aligns engineering with business language and models</td><td>Steep learning curve, requires deep domain collaboration</td></tr>
-            <tr><td>Service Mesh</td><td>Infrastructure layer for service-to-service communication — traffic management, security, observability</td><td>mTLS, traffic shaping, circuit breakers, observability without app changes</td><td>Operational complexity, latency overhead (sidecar proxy)</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Microservices</span></td><td>Application built as a suite of small, independently deployable services</td><td>Independent scaling, team autonomy, technology flexibility</td><td>Operational complexity, distributed tracing, network latency</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Monolith</span></td><td>Single deployable unit — all modules in one codebase</td><td>Simpler dev/test, no network calls, easier initial delivery</td><td>Scaling bottlenecks, deployment risk, coupling between modules</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Event-Driven Architecture</span></td><td>Components communicate via events (asynchronous messages), not direct calls</td><td>Decoupling, resilience, real-time processing, audit trail</td><td>Eventual consistency, debugging complexity, dead-letter handling</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">API-First</span></td><td>Every capability exposed as a well-defined API before implementation begins</td><td>Reusability, composability, enables partner ecosystems</td><td>Requires upfront contract discipline; versioning overhead</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">CQRS</span></td><td>Command Query Responsibility Segregation — separate read and write models</td><td>Optimized read performance, scales reads independently, clear audit trail</td><td>Eventual consistency, added code complexity</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Serverless</span></td><td>Run code without managing servers — function-level billing and scale</td><td>Zero ops overhead, cost-efficient for bursty workloads, rapid deployment</td><td>Cold starts, vendor lock-in, debugging complexity</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Domain-Driven Design (DDD)</span></td><td>Align software design with business domain — bounded contexts, aggregates, ubiquitous language</td><td>Reduces complexity, aligns engineering with business language and models</td><td>Steep learning curve, requires deep domain collaboration</td></tr>
+            <tr><td><div class="techref-concept-media-slot" aria-hidden="true"></div><span class="techref-concept-title">Service Mesh</span></td><td>Infrastructure layer for service-to-service communication — traffic management, security, observability</td><td>mTLS, traffic shaping, circuit breakers, observability without app changes</td><td>Operational complexity, latency overhead (sidecar proxy)</td></tr>
           </tbody>
         </table>
       </div>
       <div class="techref-group-h">Architecture Decision Framework: Monolith vs Microservices</div>
       <div class="techref-grid">
-        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Start with a Monolith when...</span><h4>Early-stage or unclear domain</h4><p>Team is small, domain boundaries not established, speed to market is critical, and operational complexity is a burden you can't yet afford.</p></div>
-        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Move to Microservices when...</span><h4>Scale and team autonomy demand it</h4><p>You have clear bounded contexts, teams own distinct domains, you're hitting scaling bottlenecks, and you have the platform maturity (K8s, observability, CI/CD) to support distributed systems.</p></div>
-        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#15803d">Strangler Fig Pattern</span><h4>Migrate gradually</h4><p>Wrap the legacy monolith with new microservices at the boundary. Redirect traffic incrementally. The monolith "strangled" over time. Reduces risk of big-bang rewrites.</p></div>
+        <div class="techref-card"><div class="techref-card-media-slot" aria-hidden="true"></div><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Start with a Monolith when...</span><h4>Early-stage or unclear domain</h4><p>Team is small, domain boundaries not established, speed to market is critical, and operational complexity is a burden you can't yet afford.</p></div>
+        <div class="techref-card"><div class="techref-card-media-slot" aria-hidden="true"></div><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Move to Microservices when...</span><h4>Scale and team autonomy demand it</h4><p>You have clear bounded contexts, teams own distinct domains, you're hitting scaling bottlenecks, and you have the platform maturity (K8s, observability, CI/CD) to support distributed systems.</p></div>
+        <div class="techref-card"><div class="techref-card-media-slot" aria-hidden="true"></div><span class="tech-tag" style="background:#dcfce7;color:#15803d">Strangler Fig Pattern</span><h4>Migrate gradually</h4><p>Wrap the legacy monolith with new microservices at the boundary. Redirect traffic incrementally. The monolith "strangled" over time. Reduces risk of big-bang rewrites.</p></div>
       </div>
     </div>
 
     <!-- ORG MATURITY -->
     <div class="techref-pane" id="tech-maturity" role="tabpanel">
-      <div class="techref-intro">Engineering maturity frameworks help leaders assess where their organization is today and define a clear path to improve. The most important metrics for delivery maturity are <strong>DORA metrics</strong>. Use the maturity model to drive roadmap conversations, not just assessments.</div>
-      <div class="techref-group-h">DORA Metrics — The Standard for Delivery Maturity</div>
+      <div class="techref-intro">A comprehensive engineering org maturity model covers <strong>6 groups and 22 dimensions</strong> — far beyond DORA and DevSecOps alone. Use Level 1 → 3 → 5 to score each dimension, identify gaps, and build a targeted improvement roadmap. <strong>⭐ = highest weight dimensions</strong> that have the most cascading impact on overall org health.</div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <div style="padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;background:#fee2e2;color:#991b1b;">Level 1 — Ad Hoc / Reactive</div>
+        <div style="padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;background:#fef9c3;color:#854d0e;">Level 3 — Defined &amp; Consistent</div>
+        <div style="padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;background:#dcfce7;color:#065f46;">Level 5 — Optimized &amp; Continuously Improving</div>
+        <div style="padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;background:#dbeafe;color:#1d4ed8;">⭐ = Highest Weight Dimension</div>
+      </div>
+
+      <!-- GROUP 1 -->
+      <div class="techref-group-h">Group 1 — Direction &amp; Business Partnership</div>
       <div class="techref-table-wrap">
-        <table class="techref-table">
-          <thead><tr><th>Metric</th><th>Definition</th><th>Elite</th><th>High</th><th>Medium</th><th>Low</th></tr></thead>
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
           <tbody>
-            <tr><td>Deployment Frequency</td><td>How often code is deployed to production</td><td>Multiple/day</td><td>Daily–weekly</td><td>Weekly–monthly</td><td>Monthly or less</td></tr>
-            <tr><td>Lead Time for Changes</td><td>Commit to production deployment time</td><td>&lt; 1 hour</td><td>1 day–1 week</td><td>1–4 weeks</td><td>&gt; 6 months</td></tr>
-            <tr><td>Change Failure Rate</td><td>% of deployments causing production failure</td><td>0–5%</td><td>5–10%</td><td>10–15%</td><td>&gt; 15%</td></tr>
-            <tr><td>Mean Time to Restore (MTTR)</td><td>Time to recover from a production failure</td><td>&lt; 1 hour</td><td>&lt; 1 day</td><td>1 day–1 week</td><td>&gt; 6 months</td></tr>
+            <tr><td>⭐ Strategy &amp; Business Alignment</td><td>Engineering runs on tickets; no roadmap tied to outcomes; strategy unknown to most</td><td>Quarterly roadmap exists; OKRs defined and communicated to teams</td><td>Engineering strategy co-owned with business; trade-offs visible; investments tied to measurable outcomes</td><td>Engineering strategy · OKRs · Roadmap with trade-offs</td></tr>
+            <tr><td>⭐ Product–Engineering Partnership</td><td>Engineering is handed specs; discovery happens without engineering; no joint ownership</td><td>Regular planning rituals with product; shared sprint goals; some joint discovery</td><td>Dual-track agile; shared outcome accountability; co-owned roadmap; engineering shapes "what" not just "how"</td><td>Joint roadmap · Discovery artifacts · Shared OKRs</td></tr>
+            <tr><td>Customer Centricity &amp; Outcome Focus</td><td>No feedback loops; teams measure output (features shipped); customers invisible to engineering</td><td>Feature usage tracked; customer feedback reviewed in planning; some outcome metrics</td><td>NPS/CSAT tied to engineering decisions; outcome metrics drive prioritization over story points</td><td>Feature usage reports · Outcome dashboards · Feedback loops</td></tr>
+            <tr><td>Engineering Economics &amp; FinOps</td><td>No cloud cost visibility; ROI never measured; build-vs-buy decided by opinion</td><td>Cloud costs tracked; basic budget management; some ROI tracking</td><td>Cost per deployment tracked; tech debt quantified in dollars; build-vs-buy data-driven; FinOps culture embedded</td><td>FinOps dashboard · ROI models · Tech debt cost register</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="techref-group-h">DevSecOps Maturity Model</div>
-      <table class="maturity-table">
-        <thead><tr><th>Level</th><th>Security Posture</th><th>Compliance Posture</th><th>Delivery Speed</th><th>Governance</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><span class="str-pill ml1">Level 1 · Reactive</span></td>
-            <td>Security is manual, post-deployment. Vulnerabilities discovered in production.</td>
-            <td>Compliance review happens at release time. Audit prep is manual and time-consuming.</td>
-            <td>Slow. Security and compliance reviews are bottlenecks.</td>
-            <td>Ad hoc. No governance structure. Decisions made informally.</td>
-          </tr>
-          <tr>
-            <td><span class="str-pill ml3">Level 3 · Proactive</span></td>
-            <td>SAST/DAST in CI/CD. Dependency scanning automated. Threat modeling in design phase.</td>
-            <td>Policy-as-code in pipelines. Evidence captured automatically. Audit readiness continuous.</td>
-            <td>Moderate. Automation removes most manual gates. Speed improving.</td>
-            <td>Governance council exists. Release governance standardized. OKRs tracked.</td>
-          </tr>
-          <tr>
-            <td><span class="str-pill ml5">Level 5 · Predictive</span></td>
-            <td>Zero-trust architecture. AI-powered threat detection. Security embedded at design, not code.</td>
-            <td>Continuous compliance. Zero findings. 100% automated evidence. AI-powered audit readiness.</td>
-            <td>Fast. Elite DORA metrics. Compliance accelerates speed rather than impeding it.</td>
-            <td>SDLC Council with executive alignment. OKRs cascade to all teams. Metrics drive decisions.</td>
-          </tr>
-        </tbody>
-      </table>
+
+      <!-- GROUP 2 -->
+      <div class="techref-group-h">Group 2 — Organizational Health</div>
+      <div class="techref-table-wrap">
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
+          <tbody>
+            <tr><td>⭐ Org Design &amp; Team Topology</td><td>Org is organic/reactive; teams overloaded with mixed responsibilities; ownership unclear</td><td>Stream-aligned and platform teams defined; roles and ownership documented</td><td>Team topology intentionally designed; cognitive load managed; interaction modes explicit (collaborative / X-as-a-service)</td><td>Org chart · Team topology map · RACI · Cognitive load assessment</td></tr>
+            <tr><td>Leadership Bench &amp; Succession</td><td>Hero culture; single points of failure everywhere; no succession thinking</td><td>Leadership roles filled; managers have defined scope; some informal succession</td><td>Deep bench; internal promotions common; succession plans documented; no critical single points of failure</td><td>Succession plan · Talent review · Leadership pipeline</td></tr>
+            <tr><td>⭐ People, Culture &amp; Psychological Safety</td><td>Blame culture; fear of failure; low trust; innovation suppressed</td><td>Blameless retrospectives practiced; values stated and visible; feedback loops improving</td><td>Psychological safety measurable and tracked; failure treated as learning; culture actively modeled by leadership</td><td>Engagement scores · Safety surveys · Retro outputs · Culture artifacts</td></tr>
+            <tr><td>⭐ Talent: Hiring, Retention &amp; Career Development</td><td>No career ladders; inconsistent hiring bar; reactive backfill; no L&amp;D investment</td><td>Career framework exists; structured interviews in place; L&amp;D budget allocated</td><td>Low attrition; strong internal mobility; coaching culture; L&amp;D tied to business capability needs</td><td>Career ladder · Hiring scorecard · Attrition report · L&amp;D plan</td></tr>
+            <tr><td>Knowledge Management &amp; Documentation</td><td>Tribal knowledge dominates; bus factor of 1 on key systems; onboarding takes months</td><td>Runbooks, onboarding docs, and API docs maintained; basic wiki in use</td><td>ADRs (Architecture Decision Records) standard; living docs; bus factor actively managed; new engineers productive in days</td><td>ADR library · Runbooks · Onboarding guide · API docs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GROUP 3 -->
+      <div class="techref-group-h">Group 3 — Technical Excellence</div>
+      <div class="techref-table-wrap">
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
+          <tbody>
+            <tr><td>⭐ Architecture Health &amp; Technical Debt</td><td>No architecture docs; tech debt invisible and unmanaged; no standards</td><td>Architecture diagrams maintained; debt tracked in backlog; review forums exist</td><td>Tech debt quantified and prioritized alongside features; modernization roadmap funded; architecture health scored</td><td>Architecture diagrams · Tech debt register · Modernization roadmap</td></tr>
+            <tr><td>⭐ Software Delivery Performance (DORA)</td><td>Infrequent releases; manual deployments; high change failure rate; slow recovery (days/weeks)</td><td>Regular releases; basic CI/CD in place; DORA metrics tracked and reviewed</td><td>Elite DORA: daily+ deploys · &lt;1hr lead time · &lt;5% change failure rate · &lt;1hr MTTR</td><td>DORA dashboard · Deployment frequency trend · Change failure log</td></tr>
+            <tr><td>⭐ Quality Engineering Maturity</td><td>Heavy manual testing; defects found in production; QE is a late gate with no strategic role</td><td>Test strategy defined; automation exists; shift-left in progress; QE embedded in teams</td><td>Risk-based automation; predictive quality signals; defect escape near zero; quality-as-a-culture not a function</td><td>Test strategy · Coverage model · Defect escape rate · Quality dashboard</td></tr>
+            <tr><td>Security Engineering (DevSecOps)</td><td>Security reviewed only before go-live or after incidents; no tooling in pipeline</td><td>SAST/DAST in CI/CD; vuln backlog tracked; security awareness training active</td><td>Threat modeling standard; compliance-by-design; security champions program; secrets and dependency risk fully automated</td><td>Secure SDLC controls · Vuln dashboard · Threat model · Risk register</td></tr>
+            <tr><td>Reliability Engineering (SRE)</td><td>Firefighting; incidents managed ad hoc; no postmortems; on-call unhealthy</td><td>SLOs defined; incident process documented; blameless postmortems run</td><td>Error budgets drive decisions; chaos/game days practiced; toil tracked and eliminated; on-call health measured</td><td>SLO report · Error budget · Runbooks · RCA actions · On-call health score</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GROUP 4 -->
+      <div class="techref-group-h">Group 4 — Platform &amp; Developer Experience</div>
+      <div class="techref-table-wrap">
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
+          <tbody>
+            <tr><td>DevOps &amp; CI/CD Maturity</td><td>Manual builds and deploys; environment inconsistency; no IaC; deployments require heroes</td><td>CI/CD pipelines exist; IaC in use; environments reproducible; basic automation</td><td>Fully automated pipelines; policy-as-code; zero-touch deployments; environment drift eliminated</td><td>Pipeline blueprints · IaC templates · Deployment frequency trend</td></tr>
+            <tr><td>⭐ Platform Engineering &amp; Developer Experience</td><td>Each team builds its own tooling from scratch; high toil; no shared standards</td><td>Shared CI/CD tools and templates; some self-service; DX not yet measured</td><td>Internal Developer Platform (IDP) with golden paths; DX scores tracked; time-to-first-commit &lt;1 day; self-service provisioning</td><td>IDP blueprint · Golden path templates · DX survey · Time-to-productivity metric</td></tr>
+            <tr><td>⭐ Observability &amp; Monitoring</td><td>Logs exist but hard to use; reactive alerting only; no distributed tracing</td><td>Logs, metrics, and alerts in place per team; dashboards exist; tracing in some systems</td><td>Full logs-metrics-traces across all systems; SLO-tied alerting; signal-to-noise managed; proactive anomaly detection</td><td>Observability platform · SLO dashboards · Alert runbooks · Trace analysis</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GROUP 5 -->
+      <div class="techref-group-h">Group 5 — Governance &amp; Risk</div>
+      <div class="techref-table-wrap">
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
+          <tbody>
+            <tr><td>⭐ Governance, Risk &amp; Compliance</td><td>Manual evidence collection; audit surprises; approval chaos; controls undocumented</td><td>Change advisory process defined; controls documented; audit readiness improving</td><td>Policy-as-code; automated control evidence; continuously compliant; zero audit surprises; traceability built into pipelines</td><td>Governance charter · Control matrix · Compliance dashboard · Traceability model</td></tr>
+            <tr><td>Vendor &amp; Third-Party Risk</td><td>Vendor dependencies undocumented; no open-source license policy; SLAs unmanaged</td><td>Key vendor SLAs tracked; open-source licenses reviewed; basic vendor register</td><td>Vendor risk register maintained; API dependency risk scored; build-vs-buy framework applied consistently</td><td>Vendor register · OSS license report · Dependency risk scorecard</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GROUP 6 -->
+      <div class="techref-group-h">Group 6 — Innovation &amp; Future Readiness</div>
+      <div class="techref-table-wrap">
+        <table class="maturity-table">
+          <thead><tr><th>Dimension</th><th style="background:#fee2e2;color:#991b1b;">Level 1 (Ad Hoc)</th><th style="background:#fef9c3;color:#854d0e;">Level 3 (Defined)</th><th style="background:#dcfce7;color:#065f46;">Level 5 (Optimized)</th><th>Key Outputs</th></tr></thead>
+          <tbody>
+            <tr><td>AI &amp; Emerging Tech Adoption</td><td>No AI policy; ad hoc tool use by individuals; no governance or standards</td><td>AI usage policy exists; developer tooling adopted; basic AI governance framework</td><td>Responsible AI framework enforced; AI-enabled workflows measurably improving productivity; MLOps/LLMOps in production</td><td>AI policy · Responsible AI framework · Productivity metrics · MLOps maturity score</td></tr>
+            <tr><td>⭐ Data-Driven Engineering Culture</td><td>Decisions driven by opinion; velocity the only metric tracked; no engineering scorecard</td><td>DORA, defect, and uptime metrics tracked and reviewed regularly</td><td>Engineering scorecard with DORA + quality + cost + customer metrics; all decisions backed by data; trends drive planning</td><td>Engineering scorecard · Exec dashboard · Trend analysis · Decision log</td></tr>
+            <tr><td>Innovation Culture &amp; Experimentation</td><td>No dedicated innovation time; everything is BAU backlog; failure is punished</td><td>Dedicated innovation time exists; some hackathons; fast-fail encouraged</td><td>Tech radar process live; prototype-to-production pipeline; innovation outcomes visible in roadmap; fail-fast embedded</td><td>Tech radar · Innovation pipeline · Hackathon outcomes · Prototype log</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <div class="techref-group-h">⭐ Highest-Weight Dimensions Summary</div>
+      <div class="techref-grid">
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Direction</span><h4>Strategy &amp; Business Alignment</h4><p>Everything flows from direction. Without it, the org builds the wrong things efficiently.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Direction</span><h4>Product–Engineering Partnership</h4><p>Determines whether engineering is solving real business problems or just executing a ticket queue.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Org Health</span><h4>Org Design &amp; Team Topology</h4><p>Conway's Law — structure determines output. Poor topology creates invisible coordination tax on every delivery.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Org Health</span><h4>Psychological Safety</h4><p>Foundation for all learning, improvement, and innovation. Hardest to rebuild once broken.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Org Health</span><h4>Talent: Hiring, Retention &amp; Career</h4><p>People are the org's compound interest. Attrition erases institutional knowledge faster than any tech debt.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#065f46">Technical</span><h4>Architecture &amp; Technical Debt</h4><p>The silent tax on every future delivery. Compounds invisibly until it becomes a full re-platform crisis.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#065f46">Technical</span><h4>Software Delivery (DORA)</h4><p>Best single proxy for engineering health. Elite DORA orgs have 2× better commercial outcomes.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#065f46">Technical</span><h4>Quality Engineering Maturity</h4><p>Direct impact on customer trust and reliability. Late-stage quality is 10× more expensive than shift-left.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fef9c3;color:#854d0e">Platform</span><h4>Platform Engineering &amp; DX</h4><p>A force multiplier — one platform team raises velocity for every other team in the org.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fef9c3;color:#854d0e">Platform</span><h4>Observability &amp; Monitoring</h4><p>You cannot manage what you cannot see. Blind production systems guarantee recurring incidents.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fee2e2;color:#991b1b">Governance</span><h4>Governance, Risk &amp; Compliance</h4><p>In regulated industries (healthcare, finance, life sciences), governance failure can stop the entire business.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fee2e2;color:#991b1b">Innovation</span><h4>Data-Driven Engineering Culture</h4><p>Separates orgs that continuously improve from ones that repeat the same problems with better intentions.</p></div>
+      </div>
     </div>
 
     <!-- AI / MLOPS -->
@@ -3121,6 +3290,50 @@ function switchTech(tab, btn) {
   btn.classList.add('active');
   document.getElementById('tech-' + tab).classList.add('active');
 }
+
+/* ─── Move Technical Reference above Role Targeting ───
+   The tech reference has two sibling nodes (the <section id="techref"> and its following wrapper),
+   so move them together without touching the markup order in this file. */
+(function moveTechRefAboveTargeting() {
+  const techrefSection = document.getElementById('techref');
+  const targetingSection = document.getElementById('targeting');
+  if (!techrefSection || !targetingSection) return;
+
+  const techrefWrapper = techrefSection.nextElementSibling;
+  const parent = targetingSection.parentNode;
+  if (!parent) return;
+
+  // Preserve order: section first, wrapper second.
+  parent.insertBefore(techrefSection, targetingSection);
+  if (techrefWrapper) parent.insertBefore(techrefWrapper, targetingSection);
+
+  // If the page loaded with a hash, re-scroll after moving the section.
+  const hash = window.location.hash;
+  if (hash && hash.length > 1) {
+    const target = document.getElementById(hash.slice(1));
+    if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
+})();
+
+/* ─── Tech Reference Optional Media Renderer ───
+   Non-invasive: only runs when an extension provides `data-img` on the slot.
+──────────────────────────────────────────────── */
+(function techrefRenderOptionalMedia() {
+  const slots = document.querySelectorAll('.techref-concept-media-slot[data-img], .techref-card-media-slot[data-img]');
+  if (!slots || slots.length === 0) return;
+
+  slots.forEach(slot => {
+    const imgSrc = slot.getAttribute('data-img');
+    if (!imgSrc) return;
+    const imgAlt = slot.getAttribute('data-alt') || '';
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.alt = imgAlt;
+    slot.innerHTML = '';
+    slot.appendChild(img);
+    slot.style.display = 'block';
+  });
+})();
 </script>
 </div><!-- end page-shell -->
 </body>
