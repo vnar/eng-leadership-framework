@@ -1,0 +1,3127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Leadership Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   DESIGN SYSTEM TOKENS
+───────────────────────────────────────────── */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  /* Core palette — dark navy foundation */
+  --navy-950: #050d1a;
+  --navy-900: #0a1628;
+  --navy-800: #0f2040;
+  --navy-700: #1a3055;
+  --navy-600: #243f6b;
+  --navy-500: #2e4f85;
+  --navy-400: #4a6fa5;
+  --navy-300: #6a90c0;
+  --navy-200: #98b4d6;
+  --navy-100: #ccd9ec;
+  --navy-50:  #e8eef7;
+
+  /* Accent — electric indigo */
+  --accent-600: #4f46e5;
+  --accent-500: #6366f1;
+  --accent-400: #818cf8;
+  --accent-100: #e0e7ff;
+  --accent-50:  #eef2ff;
+
+  /* Role colors */
+  --mgr:  #3b82f6;
+  --dir:  #8b5cf6;
+  --sdir: #f59e0b;
+  --vp:   #10b981;
+  --svp:  #ef4444;
+  --cto:  #1e293b;
+
+  /* Semantic */
+  --success: #059669;
+  --warn:    #d97706;
+  --danger:  #dc2626;
+
+  /* Surface */
+  --bg-page:   #f1f5fb;
+  --bg-card:   #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-muted:  #f1f5f9;
+
+  /* Text */
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary:  #94a3b8;
+
+  /* Border */
+  --border-light:  #e2e8f0;
+  --border-medium: #cbd5e1;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 4px 16px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.05);
+  --shadow-lg: 0 12px 40px rgba(15,23,42,.12), 0 4px 12px rgba(15,23,42,.06);
+  --shadow-xl: 0 24px 64px rgba(15,23,42,.15);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --sidebar-w: 240px;
+  --content-max: 1140px;
+  --nav-h: 60px;
+}
+
+/* ─────────────────────────────────────────────
+   RESET + BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────────
+   TOP NAV
+───────────────────────────────────────────── */
+.topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: var(--nav-h);
+  background: rgba(5,13,26,.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 0;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 600; color: #fff;
+  text-decoration: none; white-space: nowrap;
+  margin-right: auto;
+}
+.nav-brand-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-500), var(--vp));
+}
+.nav-links {
+  display: flex; align-items: center; gap: 2px;
+  list-style: none;
+}
+.nav-links a {
+  display: block; padding: 6px 14px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,.6);
+  text-decoration: none; border-radius: var(--radius-sm);
+  transition: all .18s ease; white-space: nowrap;
+}
+.nav-links a:hover { color: #fff; background: rgba(255,255,255,.08); }
+.nav-links a.active { color: #fff; background: rgba(255,255,255,.12); }
+
+.hamburger {
+  display: none; background: none; border: none;
+  color: rgba(255,255,255,.7); cursor: pointer;
+  padding: 8px; border-radius: var(--radius-sm);
+  font-size: 20px; margin-left: 8px;
+}
+.mobile-nav {
+  display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+  background: var(--navy-950); z-index: 199;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  flex-direction: column; padding: 8px 12px 12px;
+  gap: 4px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  padding: 10px 16px; color: rgba(255,255,255,.7);
+  font-size: 14px; text-decoration: none;
+  border-radius: var(--radius-sm); transition: all .15s;
+}
+.mobile-nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+/* ─────────────────────────────────────────────
+   LAYOUT SHELL
+───────────────────────────────────────────── */
+.page-shell {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(160deg, var(--navy-950) 0%, var(--navy-800) 60%, #132040 100%);
+  padding: 72px 40px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(99,102,241,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 100px;
+  background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+  font-size: 12px; font-weight: 600; color: var(--accent-400);
+  letter-spacing: .06em; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700; color: #fff;
+  line-height: 1.15; letter-spacing: -.02em;
+  max-width: 700px; margin: 0 auto 20px;
+}
+.hero h1 em { font-style: normal; color: var(--accent-400); }
+.hero-sub {
+  font-size: 17px; color: rgba(255,255,255,.55);
+  max-width: 580px; margin: 0 auto 40px;
+  line-height: 1.7; font-weight: 400;
+}
+.hero-badges {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center;
+}
+.hero-badge {
+  padding: 7px 18px; border-radius: 100px;
+  font-size: 13px; font-weight: 600; color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+/* Stat strip */
+.stat-strip {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  z-index: 2;
+  margin-top: -36px;
+}
+.stat-block {
+  background: var(--bg-card);
+  padding: 28px 24px;
+  border-right: 1px solid var(--border-light);
+  text-align: center;
+  transition: background .2s;
+}
+.stat-block:last-child { border-right: none; }
+.stat-block:hover { background: var(--bg-subtle); }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem; font-weight: 700;
+  color: var(--navy-800); display: block;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 12px; color: var(--text-tertiary);
+  font-weight: 500; text-transform: uppercase;
+  letter-spacing: .05em; margin-top: 6px;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION LAYOUT
+───────────────────────────────────────────── */
+.section {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+.section + .section { padding-top: 0; }
+
+.section-header {
+  margin-bottom: 36px;
+}
+.section-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; color: var(--accent-600);
+  text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block; width: 20px; height: 2px;
+  background: var(--accent-500); border-radius: 2px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 700; color: var(--navy-900);
+  letter-spacing: -.02em; line-height: 1.2;
+  margin-bottom: 10px;
+}
+.section-sub {
+  font-size: 15px; color: var(--text-secondary);
+  max-width: 600px; line-height: 1.7;
+}
+
+/* ─────────────────────────────────────────────
+   OVERVIEW TABLE
+───────────────────────────────────────────── */
+.overview-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+.overview-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13.5px;
+}
+.overview-table thead tr {
+  background: var(--navy-900);
+}
+.overview-table th {
+  padding: 13px 18px; text-align: left;
+  font-size: 11px; font-weight: 700; color: rgba(255,255,255,.65);
+  text-transform: uppercase; letter-spacing: .06em;
+  white-space: nowrap;
+}
+.overview-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+  color: var(--text-secondary);
+}
+.overview-table tr:last-child td { border-bottom: none; }
+.overview-table tr:hover td { background: var(--bg-subtle); }
+.overview-table td:first-child { white-space: nowrap; }
+.overview-table td:nth-child(2) {
+  color: var(--text-primary); font-weight: 600;
+}
+.role-badge {
+  display: inline-flex; align-items: center;
+  padding: 5px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 700; color: #fff;
+  white-space: nowrap;
+}
+.shift-pill {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 100px; font-size: 11px; font-weight: 700;
+  background: var(--accent-50); color: var(--accent-600);
+}
+
+/* ─────────────────────────────────────────────
+   LEADERSHIP TREE
+───────────────────────────────────────────── */
+.tree-wrapper {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+}
+.tree-level {
+  display: flex; flex-direction: column;
+  align-items: center; width: 100%;
+}
+.tree-connector {
+  width: 2px; height: 28px;
+  background: linear-gradient(to bottom, var(--border-medium), var(--border-light));
+}
+
+.tree-node-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 28px; border-radius: var(--radius-lg);
+  cursor: pointer; border: 2px solid rgba(255,255,255,.12);
+  font-size: 15px; font-weight: 700;
+  color: #fff; width: 380px; text-align: left;
+  transition: all .22s cubic-bezier(.4,0,.2,1);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-body);
+  position: relative; overflow: hidden;
+}
+.tree-node-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background .2s;
+}
+.tree-node-btn:hover::after { background: rgba(255,255,255,.06); }
+.tree-node-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.tree-node-btn.open { border-color: rgba(255,255,255,.3); }
+
+.tree-icon { font-size: 1.5rem; flex-shrink: 0; }
+.tree-label { flex: 1; }
+.tree-title { display: block; font-size: 15px; font-weight: 700; }
+.tree-scope { display: block; font-size: 12px; font-weight: 400; opacity: .75; margin-top: 2px; }
+.tree-horizon {
+  font-size: 11px; background: rgba(255,255,255,.15);
+  padding: 3px 10px; border-radius: 100px; white-space: nowrap;
+  font-weight: 600; flex-shrink: 0;
+}
+.tree-arrow {
+  font-size: 11px; color: rgba(255,255,255,.6);
+  transition: transform .22s; flex-shrink: 0;
+}
+.tree-node-btn.open .tree-arrow { transform: rotate(180deg); }
+
+/* Detail panel */
+.detail-panel {
+  display: none; width: 100%; max-width: 1000px;
+  background: var(--bg-card);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  margin: 0 auto 4px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  border-top: none;
+}
+.detail-panel.open { display: block; }
+
+/* Panel tabs */
+.panel-tabs {
+  display: flex; overflow-x: auto;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+  scrollbar-width: none;
+  gap: 0;
+}
+.panel-tabs::-webkit-scrollbar { display: none; }
+.panel-tab {
+  padding: 13px 20px; cursor: pointer;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-tertiary);
+  border: none; background: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all .18s ease;
+  font-family: var(--font-body);
+  position: relative; bottom: -1px;
+}
+.panel-tab:hover { color: var(--text-secondary); }
+.panel-tab.active {
+  color: var(--navy-900);
+  border-bottom-color: var(--accent-500);
+  background: var(--bg-card);
+}
+
+.panel-pane { display: none; padding: 28px 32px 32px; }
+.panel-pane.active { display: block; }
+
+/* Panel content components */
+.core-question {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 18px; border-radius: var(--radius-md);
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 20px;
+  border-left: 3px solid;
+}
+
+.time-bar {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.time-seg {
+  padding: 8px 16px; border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.resp-list { list-style: none; padding: 0; }
+.resp-list li {
+  padding: 9px 0 9px 22px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px; position: relative;
+  color: var(--text-secondary); line-height: 1.5;
+}
+.resp-list li:last-child { border-bottom: none; }
+.resp-list li::before {
+  content: '›';
+  position: absolute; left: 4px;
+  color: var(--text-tertiary); font-weight: 700;
+  font-size: 16px; line-height: 1.3;
+}
+
+.fw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media(max-width: 640px) { .fw-grid { grid-template-columns: 1fr; } }
+
+.fw-group { }
+.fw-group-label {
+  font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+.pill-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+.fw-pill {
+  padding: 5px 13px; border-radius: 100px;
+  font-size: 12.5px; font-weight: 500;
+  background: var(--bg-muted); color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+  transition: all .15s;
+}
+.fw-pill:hover {
+  background: var(--accent-50);
+  color: var(--accent-600);
+  border-color: var(--accent-100);
+}
+
+/* Output cards */
+.output-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.output-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.output-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.output-card-hd {
+  padding: 11px 16px; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+.output-card-body {
+  padding: 14px 16px; background: var(--bg-subtle);
+  font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+}
+.output-card-example {
+  margin-top: 10px; padding: 10px 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--border-medium);
+  font-size: 12px; color: var(--text-tertiary); line-height: 1.6;
+}
+.output-card-example strong {
+  display: block; color: var(--text-secondary);
+  margin-bottom: 4px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* Metrics & failure */
+.metric-list, .fail-list { list-style: none; padding: 0; }
+.metric-list li, .fail-list li {
+  padding: 10px 0 10px 28px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px; position: relative;
+  color: var(--text-secondary); line-height: 1.5;
+}
+.metric-list li:last-child, .fail-list li:last-child { border-bottom: none; }
+.metric-list li::before {
+  content: '◆'; position: absolute; left: 6px;
+  color: var(--text-tertiary); font-size: 8px; top: 14px;
+}
+.fail-list li::before {
+  content: '⚠'; position: absolute; left: 2px;
+  color: var(--danger); font-size: 12px; top: 10px;
+}
+
+/* ─────────────────────────────────────────────
+   ROLE TARGETING
+───────────────────────────────────────────── */
+.targeting-legend {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  margin-bottom: 28px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--text-secondary);
+}
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.targeting-group { margin-bottom: 28px; }
+.targeting-group-hd {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-weight: 700; font-size: 13px;
+}
+.targeting-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  background: var(--border-light);
+  gap: 1px;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  overflow: hidden;
+}
+.targeting-card {
+  background: var(--bg-card);
+  padding: 16px 20px;
+  transition: background .15s;
+}
+.targeting-card:hover { background: var(--bg-subtle); }
+.targeting-card-title {
+  font-weight: 700; font-size: 13px;
+  color: var(--text-primary); margin-bottom: 6px;
+}
+.targeting-card-best {
+  font-size: 12px; color: var(--success); font-weight: 600;
+  margin-bottom: 4px;
+}
+.targeting-card-warn {
+  font-size: 12px; color: var(--danger);
+}
+.targeting-card-warn::before { content: '⚠ '; }
+
+.positioning-callout {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #86efac; border-radius: var(--radius-lg);
+  padding: 28px 32px; margin-top: 32px;
+}
+.positioning-callout h3 {
+  font-size: 15px; font-weight: 700; color: #15803d; margin-bottom: 10px;
+}
+.positioning-stmt {
+  font-style: italic; font-size: 15px; font-weight: 500;
+  color: var(--navy-900); line-height: 1.65;
+  padding: 14px 18px;
+  background: #fff; border-left: 4px solid #16a34a;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 16px;
+}
+.pos-meta { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 10px; }
+.pos-meta-card {
+  background: #fff; border-radius: var(--radius-sm);
+  padding: 12px 16px; font-size: 13px;
+}
+.pos-meta-label {
+  font-weight: 700; margin-bottom: 4px; font-size: 12px;
+}
+.pos-meta-content { color: var(--text-secondary); }
+
+/* ─────────────────────────────────────────────
+   INTERVIEW PREP
+───────────────────────────────────────────── */
+.interview-track-tabs {
+  display: flex; gap: 0;
+  background: var(--navy-900);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 16px 20px 0; overflow-x: auto;
+}
+.interview-track-tab {
+  padding: 12px 24px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  border: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.55);
+  transition: all .2s; white-space: nowrap;
+  font-family: var(--font-body);
+  margin-right: 4px;
+}
+.interview-track-tab.active { background: var(--bg-card); color: var(--navy-900); }
+.interview-body {
+  background: var(--bg-card);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  border-top: none;
+}
+.interview-pane { display: none; }
+.interview-pane.active { display: block; }
+
+.track-intro {
+  font-size: 13px; color: var(--text-secondary);
+  background: var(--bg-subtle); border-radius: var(--radius-md);
+  padding: 12px 18px; border-left: 3px solid var(--border-medium);
+  margin-bottom: 24px; line-height: 1.6;
+}
+
+.q-block {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px; overflow: hidden;
+  transition: box-shadow .2s;
+}
+.q-block:hover { box-shadow: var(--shadow-sm); }
+.q-block.open { box-shadow: var(--shadow-md); border-color: var(--border-medium); }
+
+.q-header {
+  padding: 14px 20px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  user-select: none;
+  transition: filter .15s;
+}
+.q-header:hover { filter: brightness(.97); }
+
+.q-num {
+  flex-shrink: 0; width: 26px; height: 26px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff;
+}
+.q-text {
+  font-size: 14px; font-weight: 700; color: var(--navy-900); flex: 1;
+  line-height: 1.4;
+}
+.q-tags { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+.q-tag {
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 10px; font-weight: 700;
+}
+.tag-behavioral { background: #dbeafe; color: #1d4ed8; }
+.tag-technical  { background: #f3e8ff; color: #6d28d9; }
+.tag-strategic  { background: #fef3c7; color: #92400e; }
+.tag-leadership { background: #dcfce7; color: #15803d; }
+.q-arrow {
+  color: var(--text-tertiary); font-size: 11px;
+  transition: transform .22s; flex-shrink: 0;
+}
+.q-block.open .q-arrow { transform: rotate(180deg); }
+
+.q-answer { display: none; padding: 0 20px 20px; }
+.q-block.open .q-answer { display: block; }
+
+.q-opener {
+  background: #f0fdf4; border-left: 3px solid #22c55e;
+  padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px; font-weight: 600; color: #15803d; margin-bottom: 14px;
+}
+.q-opener span { font-weight: 400; color: #166534; }
+
+.q-bullets { list-style: none; padding: 0; margin: 0 0 14px; }
+.q-bullets li {
+  padding: 6px 0 6px 22px; position: relative;
+  font-size: 13.5px; color: var(--text-secondary); line-height: 1.55;
+  border-bottom: 1px solid var(--bg-muted);
+}
+.q-bullets li:last-child { border-bottom: none; }
+.q-bullets li::before {
+  content: '›'; position: absolute; left: 5px;
+  color: var(--text-tertiary); font-weight: 700; font-size: 15px;
+}
+.q-bullets li strong { color: var(--navy-900); }
+
+.q-closer {
+  background: #fef9c3; border-left: 3px solid #eab308;
+  padding: 9px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px; font-weight: 600; color: #854d0e; margin-top: 4px;
+}
+.q-closer span { font-weight: 400; }
+
+.q-watchout {
+  background: #fff1f2; border-left: 3px solid #f87171;
+  padding: 8px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12px; color: #991b1b; margin-top: 8px;
+  font-weight: 500;
+}
+.q-watchout::before { content: '⚠ Don\'t: '; font-weight: 700; }
+
+/* ─────────────────────────────────────────────
+   EXPERIENCE MAP
+───────────────────────────────────────────── */
+.expmap-track-tabs {
+  display: flex; gap: 0;
+  background: var(--navy-900);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 16px 20px 0; overflow-x: auto;
+}
+.expmap-track-tab {
+  padding: 12px 28px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  border: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.55);
+  transition: all .2s; white-space: nowrap;
+  font-family: var(--font-body);
+  margin-right: 4px;
+}
+.expmap-track-tab.active { background: var(--bg-card); color: var(--navy-900); }
+
+.expmap-body {
+  background: var(--bg-card);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light); border-top: none;
+}
+.expmap-pane { display: none; }
+.expmap-pane.active { display: block; }
+
+.expmap-table-wrap { overflow-x: auto; }
+.expmap-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px; min-width: 720px;
+}
+.expmap-table thead tr { background: var(--navy-900); }
+.expmap-table th {
+  padding: 12px 16px; color: rgba(255,255,255,.65);
+  font-size: 11px; font-weight: 700; text-align: left;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.expmap-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+.expmap-table tr:last-child td { border-bottom: none; }
+.expmap-table tr:hover td { background: var(--bg-subtle); }
+.expmap-table td:first-child {
+  font-weight: 700; color: var(--navy-900); width: 18%;
+}
+.expmap-table td:nth-child(2) { color: var(--text-secondary); width: 22%; }
+.expmap-table td:nth-child(3) { width: 38%; }
+.expmap-table td:last-child { width: 22%; }
+
+.quote-chip {
+  display: block;
+  background: var(--bg-subtle); border-left: 3px solid var(--border-medium);
+  padding: 7px 10px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12px; color: var(--text-secondary); font-style: italic;
+  line-height: 1.55; margin-bottom: 6px;
+}
+.quote-chip strong {
+  font-style: normal; display: block; font-size: 10.5px;
+  color: var(--text-tertiary); margin-bottom: 3px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+
+.str-pill {
+  display: inline-block; padding: 3px 11px;
+  border-radius: 100px; font-size: 11px; font-weight: 700;
+  margin-bottom: 6px;
+}
+.str-exc   { background: #dcfce7; color: #15803d; }
+.str-str   { background: #dbeafe; color: #1d4ed8; }
+.str-mod   { background: #fef9c3; color: #92400e; }
+
+.gap-tag {
+  display: block; margin-top: 4px;
+  font-size: 11.5px; padding: 3px 8px; border-radius: 5px;
+  font-weight: 600;
+}
+.gap-none    { background: #f0fdf4; color: #15803d; }
+.gap-minor   { background: #fef9c3; color: #92400e; }
+.gap-notable { background: #fee2e2; color: #991b1b; }
+
+.expmap-summary {
+  margin-top: 28px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.expmap-sum-card { border-radius: var(--radius-md); padding: 20px; }
+@media(max-width:700px){ .expmap-summary { grid-template-columns: 1fr; } }
+
+/* ─────────────────────────────────────────────
+   TECH REFERENCE
+───────────────────────────────────────────── */
+.techref-tab-bar {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; margin-bottom: 0;
+  background: var(--navy-900);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 20px 20px 0;
+}
+.techref-tab {
+  padding: 10px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+  border: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.55);
+  transition: all .2s; white-space: nowrap;
+  font-family: var(--font-body);
+}
+.techref-tab.active { background: var(--bg-card); color: var(--navy-900); }
+
+.techref-body {
+  background: var(--bg-card);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 32px 40px; box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light); border-top: none;
+}
+.techref-pane { display: none; max-width: 100%; }
+.techref-pane.active { display: block; }
+
+.techref-intro {
+  font-size: 13.5px; color: var(--text-secondary);
+  background: var(--bg-subtle); border-radius: var(--radius-md);
+  padding: 12px 18px; border-left: 3px solid var(--border-medium);
+  margin-bottom: 24px; line-height: 1.65;
+}
+
+.techref-table-wrap { overflow-x: auto; margin-bottom: 28px; }
+.techref-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px; min-width: 600px;
+  border-radius: var(--radius-md); overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.techref-table thead tr { background: var(--navy-900); }
+.techref-table th {
+  padding: 11px 16px; color: rgba(255,255,255,.65);
+  font-size: 11px; font-weight: 700; text-align: left;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.techref-table td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border-light);
+  vertical-align: top; color: var(--text-secondary);
+}
+.techref-table tr:last-child td { border-bottom: none; }
+.techref-table tr:hover td { background: var(--bg-subtle); }
+.techref-table td:first-child { font-weight: 700; color: var(--navy-900); }
+
+.techref-group-h {
+  font-size: 14px; font-weight: 700; color: var(--navy-900);
+  margin: 28px 0 14px;
+  border-bottom: 2px solid var(--border-light); padding-bottom: 8px;
+}
+
+.techref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px; margin-bottom: 28px;
+}
+.techref-card {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md); padding: 16px 18px;
+  transition: all .2s;
+}
+.techref-card:hover { box-shadow: var(--shadow-sm); border-color: var(--border-medium); }
+.techref-card h4 {
+  font-size: 13.5px; font-weight: 700; color: var(--navy-900);
+  margin-bottom: 6px;
+}
+.techref-card p {
+  font-size: 12.5px; color: var(--text-secondary);
+  line-height: 1.6; margin: 0;
+}
+.tech-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: var(--radius-sm); margin-bottom: 8px;
+}
+.maturity-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.maturity-table th {
+  padding: 9px 12px; background: var(--navy-900); color: rgba(255,255,255,.65);
+  font-size: 11px; font-weight: 700; text-align: left;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.maturity-table td {
+  padding: 9px 12px; border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+.maturity-table tr:last-child td { border-bottom: none; }
+.maturity-table tr:hover td { background: var(--bg-subtle); }
+.maturity-table td:first-child { font-weight: 700; color: var(--navy-900); }
+.ml1 { background: #fee2e2; color: #991b1b; }
+.ml3 { background: #fef9c3; color: #854d0e; }
+.ml5 { background: #dcfce7; color: #15803d; }
+
+/* ─────────────────────────────────────────────
+   SECTION DIVIDER
+───────────────────────────────────────────── */
+.section-divider {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+.section-sep {
+  border: none; border-top: 1px solid var(--border-light);
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+footer {
+  text-align: center; padding: 36px 24px;
+  color: var(--text-tertiary); font-size: 12px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-card);
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media(max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .stat-strip { grid-template-columns: repeat(2,1fr); }
+  .stat-block { border-right: none; border-bottom: 1px solid var(--border-light); }
+  .stat-block:nth-child(odd) { border-right: 1px solid var(--border-light); }
+  .stat-block:nth-last-child(-n+2) { border-bottom: none; }
+  .tree-node-btn { width: 100%; max-width: 380px; }
+  .panel-pane { padding: 20px 18px 24px; }
+  .interview-body { padding: 20px 18px; }
+  .expmap-body { padding: 20px 18px; }
+  .techref-body { padding: 24px 18px; }
+  .hero { padding: 52px 20px 64px; }
+  .section { padding: 48px 16px; }
+  .overview-table { font-size: 12px; }
+  .overview-table th, .overview-table td { padding: 10px 12px; }
+}
+@media(max-width: 480px) {
+  .stat-strip { grid-template-columns: 1fr 1fr; }
+  .stat-num { font-size: 1.6rem; }
+  .hero h1 { font-size: 1.7rem; }
+  .tree-node-btn { padding: 14px 18px; width: 100%; }
+  .fw-grid { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────
+   SMOOTH TRANSITIONS
+───────────────────────────────────────────── */
+.detail-panel, .interview-pane, .expmap-pane, .techref-pane { transition: none; }
+
+/* ─────────────────────────────────────────────
+   ACTIVE SECTION HIGHLIGHT
+───────────────────────────────────────────── */
+.pill-type {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+}
+.pill-interpreted { background: #dcfce7; color: #15803d; }
+.pill-compiled    { background: #dbeafe; color: #1d4ed8; }
+.pill-scripting   { background: #f1f5f9; color: #475569; }
+.pill-query       { background: #fef3c7; color: #92400e; }
+.pill-jit         { background: #f3e8ff; color: #6d28d9; }
+
+/* Mapping table (inside expmap pane) */
+.mapping-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.mapping-table th { padding: 10px 14px; background: #fef3c7; color: #92400e; font-weight: 700; text-align: left; border-bottom: 2px solid #fcd34d; }
+.mapping-table td { padding: 11px 14px; border-bottom: 1px solid #fef3c7; vertical-align: top; }
+.mapping-table tr:last-child td { border-bottom: none; }
+.mapping-table td:first-child { font-weight: 600; color: var(--navy-900); width: 22%; }
+.mapping-table td:nth-child(2) { color: var(--text-secondary); width: 38%; }
+.mapping-table td:nth-child(3) { color: var(--text-tertiary); font-size: 12px; width: 25%; }
+.mapping-table td:last-child { width: 15%; text-align: center; }
+.str-badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.str-exceptional { background: #dcfce7; color: #15803d; }
+.str-strong      { background: #dbeafe; color: #1d4ed8; }
+.str-moderate    { background: #fef9c3; color: #92400e; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ TOP NAV ══════════════ -->
+<nav class="topnav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-brand">
+    <div class="nav-brand-dot"></div>
+    Engineering Leadership Framework
+  </a>
+  <a href="https://www.linkedin.com/in/viharnar/" target="_blank" rel="noopener" style="font-size:12px;color:rgba(255,255,255,.45);text-decoration:none;white-space:nowrap;margin-right:16px;transition:color .18s" onmouseover="this.style.color='rgba(255,255,255,.8)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">by Vihar Nar ↗</a>
+  <ul class="nav-links" role="list">
+    <li><a href="#overview" class="active">Overview</a></li>
+    <li><a href="#levels">Levels</a></li>
+    <li><a href="#targeting">Role Targeting</a></li>
+    <li><a href="#interview">Interview Prep</a></li>
+    <li><a href="#expmap">Experience Map</a></li>
+    <li><a href="#techref">Tech Reference</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">☰</button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+  <a href="#overview" onclick="closeMobileMenu()">Overview</a>
+  <a href="#levels" onclick="closeMobileMenu()">Levels</a>
+  <a href="#targeting" onclick="closeMobileMenu()">Role Targeting</a>
+  <a href="#interview" onclick="closeMobileMenu()">Interview Prep</a>
+  <a href="#expmap" onclick="closeMobileMenu()">Experience Map</a>
+  <a href="#techref" onclick="closeMobileMenu()">Tech Reference</a>
+</div>
+
+<div class="page-shell" id="hero">
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero" aria-label="Page introduction">
+  <div class="hero-eyebrow">Engineering Leadership · Manager → CTO</div>
+  <h1>The Engineering Leadership <em>Framework</em></h1>
+  <p class="hero-sub">Roles, responsibilities, frameworks, outputs, and interview intelligence — from Engineering Manager to Chief Technology Officer.</p>
+  <div class="hero-badges">
+    <span class="hero-badge" style="background:rgba(59,130,246,.25);border-color:rgba(59,130,246,.4)">Manager</span>
+    <span class="hero-badge" style="background:rgba(139,92,246,.25);border-color:rgba(139,92,246,.4)">Director</span>
+    <span class="hero-badge" style="background:rgba(245,158,11,.25);border-color:rgba(245,158,11,.4)">Sr. Director</span>
+    <span class="hero-badge" style="background:rgba(16,185,129,.25);border-color:rgba(16,185,129,.4)">VP</span>
+    <span class="hero-badge" style="background:rgba(239,68,68,.25);border-color:rgba(239,68,68,.4)">SVP</span>
+    <span class="hero-badge" style="background:rgba(148,163,184,.25);border-color:rgba(148,163,184,.3)">CTO</span>
+  </div>
+</section>
+
+<!-- stat strip -->
+<div class="stat-strip" role="region" aria-label="Key statistics">
+  <div class="stat-block">
+    <span class="stat-num">6</span>
+    <span class="stat-label">Leadership Levels</span>
+  </div>
+  <div class="stat-block">
+    <span class="stat-num">30+</span>
+    <span class="stat-label">Interview Questions</span>
+  </div>
+  <div class="stat-block">
+    <span class="stat-num">9</span>
+    <span class="stat-label">Tech Reference Domains</span>
+  </div>
+  <div class="stat-block">
+    <span class="stat-num">2</span>
+    <span class="stat-label">Career Track Maps</span>
+  </div>
+</div>
+
+
+<!-- ══════════════ OVERVIEW TABLE ══════════════ -->
+<section class="section" id="overview" aria-labelledby="overview-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Role Evolution</div>
+    <h2 class="section-title" id="overview-title">Quick Reference: Every Level at a Glance</h2>
+    <p class="section-sub">How focus, scope, and time horizon shift as you ascend the engineering leadership ladder.</p>
+  </div>
+  <div class="overview-card">
+    <table class="overview-table" role="table" aria-label="Leadership levels overview">
+      <thead>
+        <tr>
+          <th scope="col">Level</th>
+          <th scope="col">Core Theme</th>
+          <th scope="col">Primary Focus</th>
+          <th scope="col">Scope</th>
+          <th scope="col">Time Horizon</th>
+          <th scope="col">Key Shift</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="role-badge" style="background:#3b82f6">Manager</span></td>
+          <td>Execution Excellence</td>
+          <td>Team delivery</td>
+          <td>5–10 people</td>
+          <td>Sprint / Quarter</td>
+          <td><span class="shift-pill">Doing</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-badge" style="background:#8b5cf6">Director</span></td>
+          <td>Delivery + Alignment</td>
+          <td>Multi-team coordination</td>
+          <td>Multiple teams</td>
+          <td>Quarter / Year</td>
+          <td><span class="shift-pill">Enabling</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-badge" style="background:#f59e0b">Sr. Director</span></td>
+          <td>Strategy + Systems</td>
+          <td>Org operating model</td>
+          <td>Function / Org</td>
+          <td>1–2 Years</td>
+          <td><span class="shift-pill">Designing</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-badge" style="background:#10b981">VP</span></td>
+          <td>Business Outcomes</td>
+          <td>Portfolio / investment</td>
+          <td>Multi-org</td>
+          <td>2–3 Years</td>
+          <td><span class="shift-pill">Owning outcomes</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-badge" style="background:#ef4444">SVP</span></td>
+          <td>Enterprise Strategy</td>
+          <td>Enterprise-wide alignment</td>
+          <td>Enterprise</td>
+          <td>3–5 Years</td>
+          <td><span class="shift-pill">Optimizing enterprise</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-badge" style="background:#1e293b">CTO</span></td>
+          <td>Vision + Market Position</td>
+          <td>Future technology bets</td>
+          <td>Company + Market</td>
+          <td>5–10 Years</td>
+          <td><span class="shift-pill">Defining the future</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="section-sep"></div>
+
+<!-- ══════════════ INTERACTIVE TREE ══════════════ -->
+<section class="section" id="levels" aria-labelledby="levels-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Level Deep-Dives</div>
+    <h2 class="section-title" id="levels-title">Interactive Leadership Tree</h2>
+    <p class="section-sub">Click any level to expand responsibilities, frameworks, deliverables, success metrics, and failure modes.</p>
+  </div>
+
+  <div class="tree-wrapper">
+
+    <!-- CTO -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#0f172a,#334155)" onclick="toggleNode('cto',this)" aria-expanded="false" aria-controls="panel-cto">
+        <span class="tree-icon" aria-hidden="true">🔭</span>
+        <span class="tree-label">
+          <span class="tree-title">CTO</span>
+          <span class="tree-scope">Vision · Market · Future</span>
+        </span>
+        <span class="tree-horizon">5–10 yr</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-cto" role="region" aria-label="CTO details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('cto','resp',this)" role="tab" aria-selected="true">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('cto','frameworks',this)" role="tab" aria-selected="false">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('cto','outputs',this)" role="tab" aria-selected="false">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('cto','metrics',this)" role="tab" aria-selected="false">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('cto','fail',this)" role="tab" aria-selected="false">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="cto-resp" role="tabpanel">
+          <div class="core-question" style="background:#e2e8f0;color:#0f172a;border-left-color:#0f172a">
+            Core question: <strong style="margin-left:6px">"Are we building the future?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#f1f5f9;color:#334155;flex:5">50% External Positioning</div>
+            <div class="time-seg" style="background:#e2e8f0;color:#334155;flex:3">30% Vision Setting</div>
+            <div class="time-seg" style="background:#cbd5e1;color:#334155;flex:2">20% Internal Alignment</div>
+          </div>
+          <ul class="resp-list">
+            <li>Define long-term technology vision (3–10 year horizon) aligned to company strategy</li>
+            <li>Represent company technology externally — investors, boards, partners, analysts, conferences</li>
+            <li>Drive innovation portfolio — AI, data platforms, emerging capabilities</li>
+            <li>Set architecture principles and non-negotiables (API-first, security-by-design, observability)</li>
+            <li>Ensure competitive technology differentiation vs. market</li>
+            <li>Evaluate and decide on major technology bets (build / partner / acquire)</li>
+            <li>Own responsible AI and data governance at the company level</li>
+            <li>Align SVPs and VPs to a common technology direction</li>
+            <li>Create board-level and investor-grade technology narratives</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="cto-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Innovation</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Horizon 1/2/3</span>
+                <span class="fw-pill">Technology Radar (ThoughtWorks)</span>
+                <span class="fw-pill">Stage-Gate Innovation</span>
+                <span class="fw-pill">Innovation Funnel</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Platform & Architecture</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Platform Strategy</span>
+                <span class="fw-pill">API-First Architecture</span>
+                <span class="fw-pill">Event-Driven Architecture</span>
+                <span class="fw-pill">Ecosystem / Partner Strategy</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Strategic Decisions</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Build / Buy / Partner / Acquire</span>
+                <span class="fw-pill">Differentiation Framework</span>
+                <span class="fw-pill">Value Realization Framework</span>
+                <span class="fw-pill">Market Positioning Models</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Governance & Risk</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Responsible AI Framework</span>
+                <span class="fw-pill">Data Governance</span>
+                <span class="fw-pill">Cybersecurity Governance</span>
+                <span class="fw-pill">Enterprise Risk Alignment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="cto-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">🔭 Technology Vision Document</div>
+              <div class="output-card-body">A 3–5 year narrative of where technology is going and why. Board-presentable.
+                <div class="output-card-example"><strong>Real Example</strong>"By 2028, we will operate as a fully cloud-native, AI-augmented platform delivering real-time insights at the point of care — reducing decision latency from hours to seconds."</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">📡 Technology Radar</div>
+              <div class="output-card-body">Quadrant-based view of Adopt / Trial / Assess / Hold for technologies across the company.
+                <div class="output-card-example"><strong>Real Example</strong>Adopt: Event-driven microservices, LLM-assisted dev tooling · Trial: Agentic AI · Assess: Quantum-resistant encryption · Hold: Monolithic ERP expansion</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">🌐 Innovation Roadmap (H1/H2/H3)</div>
+              <div class="output-card-body">Portfolio split across core optimization, adjacent expansion, and future bets.
+                <div class="output-card-example"><strong>Real Example</strong>H1: Improve platform reliability · H2: Build AI-powered clinical decision layer · H3: Real-time genomic inference at point of care</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">🏗 Architecture Principles</div>
+              <div class="output-card-body">Non-negotiable design rules that all systems must follow.
+                <div class="output-card-example"><strong>Real Example</strong>1. API-first — every capability exposed via API · 2. Compliance-by-design · 3. Observable — all systems emit telemetry · 4. Resilient — design for failure</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">🤝 Ecosystem / Partner Strategy</div>
+              <div class="output-card-body">Which technology ecosystems the company bets on and why.
+                <div class="output-card-example"><strong>Real Example</strong>Strategic: Cloud hyperscaler + genomics data partners · Commodity: Monitoring, ticketing, identity · Avoid: Building what partners do better</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#e2e8f0;color:#0f172a">🧠 Responsible AI Framework</div>
+              <div class="output-card-body">Policy + controls + governance for AI use across the company.
+                <div class="output-card-example"><strong>Real Example</strong>Scope: LLM usage, model governance, data lineage · Controls: Human-in-the-loop validation, drift monitoring · Policy: No patient data in external LLM calls without anonymization</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="cto-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Innovation index — number of net-new capabilities launched per year</li>
+            <li>Market differentiation — technology capabilities that competitors cannot replicate</li>
+            <li>Tech-driven revenue — new revenue streams enabled by technology bets</li>
+            <li>Platform leverage — reuse ratio across products built on shared platform</li>
+            <li>External credibility — speaking, publications, analyst recognition</li>
+            <li>Architecture compliance — % of new systems following defined principles</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="cto-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Chasing hype without value — adopting AI or new tech with no measurable outcome</li>
+            <li>Disconnect from execution — brilliant vision but cannot land it</li>
+            <li>Weak internal alignment — SVPs/VPs not bought into direction</li>
+            <li>No measurable outcomes — vision cannot be tied to business KPIs</li>
+            <li>Ivory tower mode — spending too much time on vision, not enough enabling teams</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tree-connector" aria-hidden="true"></div>
+
+    <!-- SVP -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#b91c1c,#ef4444)" onclick="toggleNode('svp',this)" aria-expanded="false" aria-controls="panel-svp">
+        <span class="tree-icon" aria-hidden="true">🏢</span>
+        <span class="tree-label">
+          <span class="tree-title">SVP</span>
+          <span class="tree-scope">Enterprise Strategy · Transformation</span>
+        </span>
+        <span class="tree-horizon">3–5 yr</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-svp" role="region" aria-label="SVP details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('svp','resp',this)" role="tab">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('svp','frameworks',this)" role="tab">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('svp','outputs',this)" role="tab">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('svp','metrics',this)" role="tab">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('svp','fail',this)" role="tab">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="svp-resp" role="tabpanel">
+          <div class="core-question" style="background:#fee2e2;color:#991b1b;border-left-color:#ef4444">
+            Core question: <strong style="margin-left:6px">"Is the whole enterprise aligned and efficient?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#fee2e2;color:#991b1b;flex:6">60% Strategy</div>
+            <div class="time-seg" style="background:#fecaca;color:#991b1b;flex:3">30% Alignment</div>
+            <div class="time-seg" style="background:#fca5a5;color:#991b1b;flex:1">10% External</div>
+          </div>
+          <ul class="resp-list">
+            <li>Define enterprise technology strategy across multiple VP portfolios</li>
+            <li>Align multiple VPs to shared direction, goals, and investment priorities</li>
+            <li>Own enterprise-wide transformation programs (multi-year, multi-function)</li>
+            <li>Govern architecture, data, security, and AI at enterprise scale</li>
+            <li>Lead M&A integration (systems, teams, processes)</li>
+            <li>Shape engineering culture, leadership norms, and operating standards</li>
+            <li>Own resilience, business continuity, and operational risk</li>
+            <li>Build and review succession plans and leadership bench across the enterprise</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="svp-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Enterprise Strategy</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Balanced Scorecard</span>
+                <span class="fw-pill">Horizon 1/2/3 Planning</span>
+                <span class="fw-pill">Enterprise Transformation Framework</span>
+                <span class="fw-pill">Value Realization Model</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Enterprise Architecture</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">TOGAF</span>
+                <span class="fw-pill">Current/Target/Transition Architecture</span>
+                <span class="fw-pill">Operating Model Standardization</span>
+                <span class="fw-pill">Domain Architecture</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Governance</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Three Lines of Defense</span>
+                <span class="fw-pill">Enterprise Governance Model</span>
+                <span class="fw-pill">Business Continuity / Resilience</span>
+                <span class="fw-pill">AI / Data Governance</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Culture & Leadership</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Leadership Principles Framework</span>
+                <span class="fw-pill">Talent Segmentation / Succession</span>
+                <span class="fw-pill">M&A Integration Framework</span>
+                <span class="fw-pill">Transformation PMO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="svp-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fee2e2;color:#991b1b">📋 Enterprise Transformation Roadmap</div>
+              <div class="output-card-body">Multi-year sequenced plan for large-scale change across the whole company.
+                <div class="output-card-example"><strong>Real Example</strong>Phase 1 (Yr 1): Consolidate data platforms · Phase 2 (Yr 2): Unify integration layer · Phase 3 (Yr 3): AI and analytics on unified platform</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fee2e2;color:#991b1b">📊 Balanced Scorecard</div>
+              <div class="output-card-body">Enterprise KPI framework across four dimensions.
+                <div class="output-card-example"><strong>Real Example</strong>Financial: $15M cost reduction · Customer: NPS +12 · Process: Release cycle -40% · Growth: 3 new AI capabilities shipped</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fee2e2;color:#991b1b">🏛 Governance Charter</div>
+              <div class="output-card-body">Who owns what decisions at the enterprise level.
+                <div class="output-card-example"><strong>Real Example</strong>Engineering owns: Build/implementation · Compliance owns: Policy and audit · Architecture Board owns: Platform standards and tech selection</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fee2e2;color:#991b1b">🛡 Resilience Plan (BCP/DR)</div>
+              <div class="output-card-body">Recovery capability for critical systems.
+                <div class="output-card-example"><strong>Real Example</strong>RTO: 30 minutes for Tier 1 systems · RPO: 5 minutes (near-zero data loss) · Annual DR test with documented results</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fee2e2;color:#991b1b">🎯 Enterprise Architecture (TOGAF)</div>
+              <div class="output-card-body">Current → Transition → Target state blueprints.
+                <div class="output-card-example"><strong>Real Example</strong>Current: 14 siloed legacy apps · Transition: Shared integration bus, common identity layer · Target: Cloud-native domain services with unified data fabric</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="svp-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Enterprise efficiency — reduction in operational cost across functions</li>
+            <li>Strategic initiative success rate — % of transformation programs hitting targets</li>
+            <li>Organizational maturity — DevSecOps, governance, reliability maturity scores</li>
+            <li>Market competitiveness — capability gaps vs. top competitors</li>
+            <li>Leadership bench strength — % of critical roles with identified successors</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="svp-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Too theoretical — great strategy, no execution</li>
+            <li>Not driving results through VPs — misalignment between peers</li>
+            <li>Culture breakdown — leadership principles say one thing, behavior says another</li>
+            <li>Over-centralizing — removing agility by over-standardizing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tree-connector" aria-hidden="true"></div>
+
+    <!-- VP -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#047857,#10b981)" onclick="toggleNode('vp',this)" aria-expanded="false" aria-controls="panel-vp">
+        <span class="tree-icon" aria-hidden="true">💼</span>
+        <span class="tree-label">
+          <span class="tree-title">VP</span>
+          <span class="tree-scope">Business Outcomes · Portfolio</span>
+        </span>
+        <span class="tree-horizon">2–3 yr</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-vp" role="region" aria-label="VP details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('vp','resp',this)">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('vp','frameworks',this)">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('vp','outputs',this)">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('vp','metrics',this)">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('vp','fail',this)">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="vp-resp" role="tabpanel">
+          <div class="core-question" style="background:#d1fae5;color:#065f46;border-left-color:#10b981">
+            Core question: <strong style="margin-left:6px">"Is technology driving business value?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#d1fae5;color:#065f46;flex:5">50% Business Alignment</div>
+            <div class="time-seg" style="background:#a7f3d0;color:#065f46;flex:3">30% Strategy</div>
+            <div class="time-seg" style="background:#6ee7b7;color:#065f46;flex:2">20% Org Leadership</div>
+          </div>
+          <ul class="resp-list">
+            <li>Own a portfolio of products and platforms; translate technology into business outcomes</li>
+            <li>Own budget — typically $10M–$100M+ across multiple teams</li>
+            <li>Prioritize investments across competing initiatives using ROI / WSJF</li>
+            <li>Executive alignment — CEO, CFO, CPO, board-level conversations</li>
+            <li>Large-scale transformation ownership end-to-end</li>
+            <li>Vendor negotiations, ecosystem partnerships, build vs buy at scale</li>
+            <li>Define org structure for multiple Directors under you</li>
+            <li>Create business cases with financial justification</li>
+            <li>Ensure technology work ties directly to revenue, cost, or strategic differentiation</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="vp-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Portfolio & Strategy</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Portfolio Management Framework</span>
+                <span class="fw-pill">WSJF (Weighted Shortest Job First)</span>
+                <span class="fw-pill">Business Capability Mapping</span>
+                <span class="fw-pill">Cost of Delay</span>
+                <span class="fw-pill">Impact vs Effort Matrix</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Financial</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">ROI / NPV / IRR</span>
+                <span class="fw-pill">TCO (Total Cost of Ownership)</span>
+                <span class="fw-pill">FinOps (Cloud Unit Economics)</span>
+                <span class="fw-pill">Run / Grow / Transform Allocation</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Operating Model</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Product Operating Model</span>
+                <span class="fw-pill">Team Topology</span>
+                <span class="fw-pill">OKRs at Portfolio Scale</span>
+                <span class="fw-pill">QBR / MBR Governance</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Stakeholder & Communication</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Executive Narrative Framework</span>
+                <span class="fw-pill">Board-Level Technology Story</span>
+                <span class="fw-pill">Value Realization Reporting</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="vp-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#d1fae5;color:#065f46">📊 Technology Investment Portfolio</div>
+              <div class="output-card-body">Prioritized view of all technology investments with ROI justification.
+                <div class="output-card-example"><strong>Real Example</strong>Run: 40% ($12M) maintaining core platforms · Grow: 45% ($14M) product capabilities · Transform: 15% ($4M) AI and modernization</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#d1fae5;color:#065f46">💼 Business Case (Build/Buy)</div>
+              <div class="output-card-body">Financial + strategic justification for platform decisions.
+                <div class="output-card-example"><strong>Real Example</strong>Platform QMS build vs Veeva: TCO analysis, regulatory track record, time-to-value. Decision: Veeva + compliance config layer. Saved 18 months vs build.</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#d1fae5;color:#065f46">📈 Annual Technology Roadmap</div>
+              <div class="output-card-body">Multi-team, multi-year capability roadmap tied to business goals.
+                <div class="output-card-example"><strong>Real Example</strong>Q1: Platform stability · Q2: AI-powered workflow launch · Q3: Integration ecosystem · Q4: Next-gen data layer</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#d1fae5;color:#065f46">🎯 Org Design Blueprint</div>
+              <div class="output-card-body">Team structure, reporting model, and hiring plan for 2–5 Director-led orgs.
+                <div class="output-card-example"><strong>Real Example</strong>3 product-aligned orgs (Platform, Clinical, Data) + 1 horizontal (QE/Security) · Total: 4 Directors, 80 FTEs, $28M budget</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="vp-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Business value delivered — revenue enabled, cost reduced, or risk mitigated by portfolio</li>
+            <li>Portfolio health — % of programs on track vs at-risk vs off-track</li>
+            <li>Budget performance — actuals vs plan, forecast accuracy</li>
+            <li>Time to value — from investment decision to business outcome</li>
+            <li>Stakeholder trust — executive and board confidence in technology delivery</li>
+            <li>Org effectiveness — Director-level retention, team health, hiring velocity</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="vp-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Technology for technology's sake — cannot connect projects to business outcomes</li>
+            <li>Poor financial fluency — unable to make or defend investment decisions in CFO terms</li>
+            <li>Over-managing Directors — scaling down instead of trusting and enabling them</li>
+            <li>Not building executive relationships — loses influence at board and C-suite level</li>
+            <li>Ignoring organizational health — team attrition and morale issues compound into delivery failure</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tree-connector" aria-hidden="true"></div>
+
+    <!-- SR. DIRECTOR -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#b45309,#f59e0b)" onclick="toggleNode('sdir',this)" aria-expanded="false" aria-controls="panel-sdir">
+        <span class="tree-icon" aria-hidden="true">🔧</span>
+        <span class="tree-label">
+          <span class="tree-title">Sr. Director</span>
+          <span class="tree-scope">Strategy · Systems · Operating Model</span>
+        </span>
+        <span class="tree-horizon">1–2 yr</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-sdir" role="region" aria-label="Sr. Director details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('sdir','resp',this)">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('sdir','frameworks',this)">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('sdir','outputs',this)">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('sdir','metrics',this)">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('sdir','fail',this)">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="sdir-resp" role="tabpanel">
+          <div class="core-question" style="background:#fef3c7;color:#92400e;border-left-color:#f59e0b">
+            Core question: <strong style="margin-left:6px">"Is the organization designed to win?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#fef3c7;color:#92400e;flex:4">40% Strategy</div>
+            <div class="time-seg" style="background:#fde68a;color:#92400e;flex:4">40% Operating Model</div>
+            <div class="time-seg" style="background:#fcd34d;color:#92400e;flex:2">20% Delivery Oversight</div>
+          </div>
+          <ul class="resp-list">
+            <li>Define and own the operating model for a large function or organization</li>
+            <li>Design org structure, team topology, roles, and governance</li>
+            <li>Own cross-functional governance — SDLC Council, architecture review, change management</li>
+            <li>Drive enterprise-level compliance, audit readiness, and regulatory strategy</li>
+            <li>Budget ownership: typically $5M–$30M across multiple Directors</li>
+            <li>Define and land multi-year engineering maturity programs</li>
+            <li>Build AI/ML and platform capability at the function level</li>
+            <li>Executive presence — VP-level alignment and board-adjacent reporting</li>
+            <li>Develop and grow Director-level talent pipeline</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="sdir-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Operating Model & Org Design</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Team Topology</span>
+                <span class="fw-pill">Functional vs Product Alignment</span>
+                <span class="fw-pill">Golden Path Engineering</span>
+                <span class="fw-pill">Centers of Excellence Model</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Governance & Compliance</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">SDLC Council / Governance Board</span>
+                <span class="fw-pill">IEC 62304 / ISO 13485</span>
+                <span class="fw-pill">Policy-as-Code</span>
+                <span class="fw-pill">Compliance-by-Design</span>
+                <span class="fw-pill">RACI / RAPID</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Engineering Maturity</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">DORA Metrics</span>
+                <span class="fw-pill">DevSecOps Maturity Model</span>
+                <span class="fw-pill">SRE / Reliability Engineering</span>
+                <span class="fw-pill">Engineering Health Index</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">AI & Data Strategy</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Responsible AI Framework</span>
+                <span class="fw-pill">AI Governance Model</span>
+                <span class="fw-pill">ML Ops Maturity</span>
+                <span class="fw-pill">LLM Usage Policy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="sdir-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fef3c7;color:#92400e">🏗 Engineering Operating Model</div>
+              <div class="output-card-body">Full operating model doc: mission, org design, team topology, governance cadence, KPIs.
+                <div class="output-card-example"><strong>Real Example</strong>Quality Engineering function: mission, 4 capability tracks, governance via SDLC Council, 55 FTEs, under $6M budget — built from scratch</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fef3c7;color:#92400e">📋 SDLC Governance Charter</div>
+              <div class="output-card-body">Cross-functional board charter: members, decision rights, cadence, escalation paths.
+                <div class="output-card-example"><strong>Real Example</strong>SDLC Council: Engineering, Quality, Compliance, Business · Monthly cadence · Owns: release governance, platform standards, policy decisions</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fef3c7;color:#92400e">📊 Engineering Maturity Roadmap</div>
+              <div class="output-card-body">Current state assessment → target state → phased improvement plan with milestones.
+                <div class="output-card-example"><strong>Real Example</strong>DORA baseline → CI/CD golden paths → policy-as-code → 100% traceability → AI-powered SDLC intelligence in 18 months</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fef3c7;color:#92400e">🤖 AI Governance Policy</div>
+              <div class="output-card-body">Enterprise policy for responsible AI use, data handling, and compliance controls.
+                <div class="output-card-example"><strong>Real Example</strong>Authored FMI enterprise AI policy, Roche-aligned · Scope: LLM usage, model governance, data quality, FDA alignment · Practice guidance for day-to-day use</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#fef3c7;color:#92400e">📈 Compliance & Reliability Report</div>
+              <div class="output-card-body">Executive dashboard: audit posture, uptime, incident trends, release health.
+                <div class="output-card-example"><strong>Real Example</strong>Zero regulatory findings · 99.99% uptime · Audit prep time -90% · Release frequency +40% — quarterly executive report</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="sdir-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Compliance posture — audit findings, regulatory status, continuous readiness score</li>
+            <li>Engineering maturity — DORA metrics, deployment frequency, lead time, MTTR</li>
+            <li>Platform reliability — uptime, SLO adherence, incident frequency and severity</li>
+            <li>Organization efficiency — throughput per FTE, cost per deployment, velocity trend</li>
+            <li>Governance effectiveness — % of releases with full traceability, evidence capture rate</li>
+            <li>AI and innovation delivery — number of AI capabilities operationalized</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="sdir-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Scaling down to Director mode — managing execution instead of designing the system</li>
+            <li>Governance as bureaucracy — creating process that slows rather than enables teams</li>
+            <li>Losing VP alignment — operating without clear sponsorship and strategic context</li>
+            <li>Ignoring compliance risk — treating audit and regulatory posture as someone else's problem</li>
+            <li>Building without measuring — operating model has no health metrics or feedback loops</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tree-connector" aria-hidden="true"></div>
+
+    <!-- DIRECTOR -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#5b21b6,#8b5cf6)" onclick="toggleNode('dir',this)" aria-expanded="false" aria-controls="panel-dir">
+        <span class="tree-icon" aria-hidden="true">🔗</span>
+        <span class="tree-label">
+          <span class="tree-title">Director</span>
+          <span class="tree-scope">Alignment · Multi-team Delivery</span>
+        </span>
+        <span class="tree-horizon">Q / Year</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-dir" role="region" aria-label="Director details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('dir','resp',this)">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('dir','frameworks',this)">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('dir','outputs',this)">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('dir','metrics',this)">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('dir','fail',this)">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="dir-resp" role="tabpanel">
+          <div class="core-question" style="background:#ede9fe;color:#4c1d95;border-left-color:#8b5cf6">
+            Core question: <strong style="margin-left:6px">"Are all teams moving together toward the same goal?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#ede9fe;color:#4c1d95;flex:4">40% Delivery</div>
+            <div class="time-seg" style="background:#ddd6fe;color:#4c1d95;flex:4">40% Alignment</div>
+            <div class="time-seg" style="background:#c4b5fd;color:#4c1d95;flex:2">20% Stakeholders</div>
+          </div>
+          <ul class="resp-list">
+            <li>Own delivery across multiple teams — align timelines, dependencies, outcomes</li>
+            <li>Align engineering delivery to product roadmap and business goals</li>
+            <li>Budget and headcount planning across teams</li>
+            <li>Cross-team dependency management — identify and resolve blockers</li>
+            <li>Define team structure, roles, and operating model at team level</li>
+            <li>Manage senior individual contributors and engineering managers</li>
+            <li>Drive quarterly and annual OKR definition and execution</li>
+            <li>Report program health to VP and senior stakeholders</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="dir-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Planning & Alignment</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">OKRs</span>
+                <span class="fw-pill">SAFe / Program Increment Planning</span>
+                <span class="fw-pill">RACI / RAPID</span>
+                <span class="fw-pill">Dependency Mapping</span>
+                <span class="fw-pill">Quarterly Planning</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Program Governance</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">RAID Framework</span>
+                <span class="fw-pill">Program Management</span>
+                <span class="fw-pill">Escalation Framework</span>
+                <span class="fw-pill">Operating Rhythm (MBR/QBR)</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Resource & Org</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Capacity Allocation Model</span>
+                <span class="fw-pill">Headcount Planning</span>
+                <span class="fw-pill">Org Design Basics</span>
+                <span class="fw-pill">Talent Review</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Operating Model</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Product Operating Model</span>
+                <span class="fw-pill">Service Delivery Model</span>
+                <span class="fw-pill">Functional vs Product Alignment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="dir-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#ede9fe;color:#4c1d95">📅 Quarterly OKR Document</div>
+              <div class="output-card-body">Cascaded objectives and measurable key results.
+                <div class="output-card-example"><strong>Real Example</strong>Objective: Deliver platform v2.0 reliability milestone · KR1: P1 incidents -50% · KR2: 99.95% uptime · KR3: 100% releases gate-checked via automated pipeline</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#ede9fe;color:#4c1d95">📋 Program / Dependency Map</div>
+              <div class="output-card-body">Visual map of cross-team dependencies and timelines.
+                <div class="output-card-example"><strong>Real Example</strong>Team A (Auth API) must deliver by Week 4 → blocks Team B (Portal) · Team C (Data) must deliver by Week 6 → blocks Team D (Reporting)</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#ede9fe;color:#4c1d95">📊 RAID Log</div>
+              <div class="output-card-body">Active tracking of Risks, Assumptions, Issues, Dependencies.
+                <div class="output-card-example"><strong>Real Example</strong>Risk: Third-party API rate limit → Mitigation: caching layer · Issue: Dev environment instability → Owner: Platform team · Dependency: Legal sign-off due Week 5</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#ede9fe;color:#4c1d95">📁 Capacity Allocation Plan</div>
+              <div class="output-card-body">How effort is split across priorities this quarter.
+                <div class="output-card-example"><strong>Real Example</strong>60% → Platform v2.0 roadmap features · 20% → Production support · 15% → Technical debt · 5% → Innovation spike</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#ede9fe;color:#4c1d95">📈 Executive Status Report</div>
+              <div class="output-card-body">Weekly / bi-weekly delivery pulse for VP and above.
+                <div class="output-card-example"><strong>Real Example</strong>Status: 🟡 At Risk · Milestone: Platform v2.0 Beta delayed 1 week · Why: Auth API slipped 3 days · Action: Extended sprint, go-live Nov 3 → Nov 10</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="dir-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Program delivery success — % of programs delivered on scope, time, budget</li>
+            <li>Cross-team throughput — features delivered across all teams per quarter</li>
+            <li>Cost vs delivery efficiency — output per dollar of team investment</li>
+            <li>Stakeholder satisfaction — from product, business, and executive partners</li>
+            <li>Team health — attrition, engagement, capacity utilization</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="dir-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Becoming a "super manager" — scaling down to manage ICs instead of scaling up</li>
+            <li>Poor cross-team prioritization — everything is urgent, nothing gets done</li>
+            <li>Not pushing back on product/business — saying yes to everything</li>
+            <li>Avoiding hard conversations — escalating too late or not at all</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tree-connector" aria-hidden="true"></div>
+
+    <!-- MANAGER -->
+    <div class="tree-level">
+      <button class="tree-node-btn" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)" onclick="toggleNode('mgr',this)" aria-expanded="false" aria-controls="panel-mgr">
+        <span class="tree-icon" aria-hidden="true">⚡</span>
+        <span class="tree-label">
+          <span class="tree-title">Manager</span>
+          <span class="tree-scope">Execution · Team · Delivery</span>
+        </span>
+        <span class="tree-horizon">Sprint / Q</span>
+        <span class="tree-arrow" aria-hidden="true">▼</span>
+      </button>
+      <div class="detail-panel" id="panel-mgr" role="region" aria-label="Manager details">
+        <div class="panel-tabs" role="tablist">
+          <button class="panel-tab active" onclick="switchTab('mgr','resp',this)">Responsibilities</button>
+          <button class="panel-tab" onclick="switchTab('mgr','frameworks',this)">Frameworks</button>
+          <button class="panel-tab" onclick="switchTab('mgr','outputs',this)">Outputs + Examples</button>
+          <button class="panel-tab" onclick="switchTab('mgr','metrics',this)">Metrics</button>
+          <button class="panel-tab" onclick="switchTab('mgr','fail',this)">Failure Modes</button>
+        </div>
+        <div class="panel-pane active" id="mgr-resp" role="tabpanel">
+          <div class="core-question" style="background:#dbeafe;color:#1e40af;border-left-color:#3b82f6">
+            Core question: <strong style="margin-left:6px">"Is the team delivering correctly and sustainably?"</strong>
+          </div>
+          <div class="time-bar">
+            <div class="time-seg" style="background:#dbeafe;color:#1e40af;flex:7">70% Execution</div>
+            <div class="time-seg" style="background:#bfdbfe;color:#1e40af;flex:2">20% People</div>
+            <div class="time-seg" style="background:#93c5fd;color:#1e40af;flex:1">10% Process</div>
+          </div>
+          <ul class="resp-list">
+            <li>Deliver features on time, with quality, and within scope</li>
+            <li>Manage team performance for 5–10 engineers or QA / product people</li>
+            <li>Ensure SDLC compliance and engineering best practices</li>
+            <li>Run sprint ceremonies: planning, standups, retros, reviews</li>
+            <li>First-line hiring, onboarding, and coaching</li>
+            <li>Manage production issues and incident response</li>
+            <li>Define acceptance criteria and ensure "done" is clearly defined</li>
+            <li>Own and resolve team-level blockers before they escalate</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="mgr-frameworks" role="tabpanel">
+          <div class="fw-grid">
+            <div class="fw-group">
+              <div class="fw-group-label">Delivery & Execution</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Agile / Scrum</span>
+                <span class="fw-pill">Kanban</span>
+                <span class="fw-pill">SDLC Framework</span>
+                <span class="fw-pill">CI/CD Practices</span>
+                <span class="fw-pill">DORA Metrics</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Quality & Safety</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Test Pyramid</span>
+                <span class="fw-pill">Secure SDLC / DevSecOps basics</span>
+                <span class="fw-pill">IEC 62304 (regulated envs)</span>
+                <span class="fw-pill">Change Management</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">Operations</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">Incident Management</span>
+                <span class="fw-pill">Problem Management / RCA</span>
+                <span class="fw-pill">SLA Management</span>
+                <span class="fw-pill">Postmortem / Blameless Review</span>
+              </div>
+            </div>
+            <div class="fw-group">
+              <div class="fw-group-label">People Management</div>
+              <div class="pill-wrap">
+                <span class="fw-pill">OKRs / SMART Goals</span>
+                <span class="fw-pill">SBI Feedback Model</span>
+                <span class="fw-pill">Situational Leadership</span>
+                <span class="fw-pill">Performance Management</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="mgr-outputs" role="tabpanel">
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#dbeafe;color:#1e40af">📝 Sprint Backlog / User Stories</div>
+              <div class="output-card-body">Prioritized, acceptance-criteria-defined work items for the sprint.
+                <div class="output-card-example"><strong>Real Example</strong>US-447: As a clinician, I can view patient genomic results in under 2 seconds · AC: p95 latency &lt; 2s, zero data-loss, HIPAA audit log captured</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#dbeafe;color:#1e40af">📊 Sprint Velocity Report</div>
+              <div class="output-card-body">Sprint-over-sprint throughput, predictability, and trend analysis.
+                <div class="output-card-example"><strong>Real Example</strong>Sprint 14: 42 pts planned / 38 delivered (90%) · Velocity trend: +8% over 6 sprints · Carry-over: 2 stories (auth integration dependency)</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#dbeafe;color:#1e40af">🔥 Incident RCA (Root Cause Analysis)</div>
+              <div class="output-card-body">Structured post-incident report with timeline, root cause, and corrective actions.
+                <div class="output-card-example"><strong>Real Example</strong>P1 Outage, Nov 8: DB connection pool exhaustion · Timeline → Root cause: config change missed review · Actions: automated config validation in pipeline</div>
+              </div>
+            </div>
+            <div class="output-card">
+              <div class="output-card-hd" style="background:#dbeafe;color:#1e40af">👥 Performance Review / Development Plan</div>
+              <div class="output-card-body">Structured feedback and growth roadmap for each direct report.
+                <div class="output-card-example"><strong>Real Example</strong>Engineer: Strong on delivery, needs architecture skills · Goal: Lead system design for one new service in Q2 · Check-in: Monthly 1:1 with design review</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-pane" id="mgr-metrics" role="tabpanel">
+          <ul class="metric-list">
+            <li>Sprint delivery rate — % of committed work delivered each sprint</li>
+            <li>Defect escape rate — bugs found in production vs. found in QA</li>
+            <li>DORA metrics — deployment frequency, lead time for changes, MTTR, change failure rate</li>
+            <li>Team retention and engagement — voluntary attrition, eNPS, 1:1 health</li>
+            <li>SLA / SLO adherence — uptime and incident response time vs. commitments</li>
+          </ul>
+        </div>
+        <div class="panel-pane" id="mgr-fail" role="tabpanel">
+          <ul class="fail-list">
+            <li>Hero culture — fixing everything yourself instead of building team capability</li>
+            <li>Poor prioritization — letting the team take on too much with no buffer for debt or incidents</li>
+            <li>Avoiding feedback — not having hard but necessary conversations with underperformers</li>
+            <li>No context for the team — executing without helping the team understand why and what it means</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tree-wrapper -->
+</section>
+
+<div class="section-divider"><hr class="section-sep"></div>
+
+
+<!-- ══════════════ ROLE TARGETING ══════════════ -->
+<section class="section" id="targeting" aria-labelledby="targeting-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Job Search Strategy</div>
+    <h2 class="section-title" id="targeting-title">Role Targeting Guide</h2>
+    <p class="section-sub">Which roles to prioritize, the best positioning angle for each, and what to watch out for.</p>
+  </div>
+
+  <div class="targeting-legend" aria-label="Legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> Strong Fit — Lead with this</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Possible — Requires framing</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Avoid — Wrong lane</div>
+  </div>
+
+  <!-- Strong Fit -->
+  <div class="targeting-group">
+    <div class="targeting-group-hd" style="background:#f0fdf4;color:#15803d;border:1px solid #86efac">
+      <div class="legend-dot" style="background:#10b981"></div>
+      Strong Fit — Lead with these
+    </div>
+    <div class="targeting-cards">
+      <div class="targeting-card">
+        <div class="targeting-card-title">Sr. Director of Software Engineering</div>
+        <div class="targeting-card-best">Best angle: Platform leadership + AI-enabled SDLC + org scaling</div>
+        <div class="targeting-card-warn">Watch: Ensure current SWE scope is front and center</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Sr. Director of Engineering — Regulated Platforms</div>
+        <div class="targeting-card-best">Best angle: Compliance-by-design + FDA/IEC 62304 + zero findings track record</div>
+        <div class="targeting-card-warn">Watch: Don't let QE framing overshadow engineering depth</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Sr. Director of AI & Platform Engineering</div>
+        <div class="targeting-card-best">Best angle: AI policy + SDLC intelligence + AI-native org design</div>
+        <div class="targeting-card-warn">Watch: Quantify AI impact in business terms, not just technical</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">VP of Engineering — Biotech / Life Sciences</div>
+        <div class="targeting-card-best">Best angle: 10 years regulated-domain depth, SDLC Council governance, $6M+ org</div>
+        <div class="targeting-card-warn">Watch: VP requires stronger business case / financial fluency narrative</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Director of Engineering Governance & Compliance</div>
+        <div class="targeting-card-best">Best angle: SDLC Council, policy-as-code, continuous audit readiness</div>
+        <div class="targeting-card-warn">Watch: This is a step down — use as a bridgehead if the company is strategic</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Possible Fit -->
+  <div class="targeting-group">
+    <div class="targeting-group-hd" style="background:#fefce8;color:#92400e;border:1px solid #fde68a">
+      <div class="legend-dot" style="background:#f59e0b"></div>
+      Possible — Requires Framing
+    </div>
+    <div class="targeting-cards">
+      <div class="targeting-card">
+        <div class="targeting-card-title">Head of Quality Engineering / QE VP</div>
+        <div class="targeting-card-best">Best angle: Built QE from 0 → 55 FTEs; QE as strategic accelerator, not bottleneck</div>
+        <div class="targeting-card-warn">Watch: Frame as platform leadership, not just quality oversight</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Sr. Director of DevSecOps / Platform Engineering</div>
+        <div class="targeting-card-best">Best angle: CI/CD golden paths, policy-as-code, compliance automation</div>
+        <div class="targeting-card-warn">Watch: Emphasize platform infra depth — may need to highlight hands-on tooling more</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Chief of Staff to CTO / Technical COO</div>
+        <div class="targeting-card-best">Best angle: Governance, cross-functional alignment, executive presence</div>
+        <div class="targeting-card-warn">Watch: Clarify scope — this could limit growth ceiling</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Avoid -->
+  <div class="targeting-group">
+    <div class="targeting-group-hd" style="background:#fef2f2;color:#991b1b;border:1px solid #fca5a5">
+      <div class="legend-dot" style="background:#ef4444"></div>
+      Avoid — Wrong Lane
+    </div>
+    <div class="targeting-cards">
+      <div class="targeting-card">
+        <div class="targeting-card-title">QA Manager / Test Lead Roles</div>
+        <div class="targeting-card-best">—</div>
+        <div class="targeting-card-warn">Too junior — your story is Sr. Director level; this would be 3–4 levels down</div>
+      </div>
+      <div class="targeting-card">
+        <div class="targeting-card-title">Pure Product VP / Sales-Led Roles</div>
+        <div class="targeting-card-best">—</div>
+        <div class="targeting-card-warn">Wrong lane — your story is engineering + platform + transformation, not product growth or sales</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Positioning -->
+  <div class="positioning-callout">
+    <h3>🎯 Your Strongest Positioning Statement</h3>
+    <div class="positioning-stmt">
+      "A senior engineering and platform leader who scales organizations, modernizes operating models, strengthens quality and reliability, and delivers regulated, mission-critical technology with measurable business impact."
+    </div>
+    <div class="pos-meta">
+      <div class="pos-meta-card">
+        <div class="pos-meta-label" style="color:#15803d">Lead with these</div>
+        <div class="pos-meta-content">Org building · Platform engineering · Governance design · Regulated delivery · AI policy · Maturity transformation</div>
+      </div>
+      <div class="pos-meta-card">
+        <div class="pos-meta-label" style="color:#d97706">Avoid leading with</div>
+        <div class="pos-meta-content">QA-only framing · Compliance-only narrative · PMO language · Process-heavy descriptions</div>
+      </div>
+      <div class="pos-meta-card">
+        <div class="pos-meta-label" style="color:#1d4ed8">Best industries</div>
+        <div class="pos-meta-content">Biotech · Healthtech · Diagnostics · Life sciences · Regulated SaaS · Enterprise platform companies</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="section-sep"></div>
+
+<!-- ══════════════ INTERVIEW PREP ══════════════ -->
+<section class="section" id="interview" aria-labelledby="interview-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Interview Intelligence</div>
+    <h2 class="section-title" id="interview-title">Interview Preparation</h2>
+    <p class="section-sub">Curated questions with structured answer frameworks, opening lines, evidence bullets, and closing statements. Click any question to expand.</p>
+  </div>
+
+  <div class="interview-track-tabs" role="tablist" aria-label="Interview tracks">
+    <button class="interview-track-tab active" onclick="switchInterview('swe',this)" role="tab">SWE Leadership Track</button>
+    <button class="interview-track-tab" onclick="switchInterview('qe',this)" role="tab">QE / AI Governance Track</button>
+    <button class="interview-track-tab" onclick="switchInterview('general',this)" role="tab">General Leadership Track</button>
+  </div>
+  <div class="interview-body">
+
+    <!-- SWE TRACK -->
+    <div class="interview-pane active" id="interview-swe" role="tabpanel">
+      <div class="track-intro">Track: <strong>Sr. Director of Software Engineering</strong> — Platform Engineering · AI-Enabled SDLC · Regulated Delivery · DevSecOps · Engineering Operating Model</div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q1</span>
+          <span class="q-text">Walk me through your most significant engineering leadership achievement. <span class="q-tag tag-behavioral">Behavioral</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I'll use Foundation Medicine as my proof of concept — because it combines every dimension this question is really asking about: scale, complexity, regulated environment, and measurable business impact."</span></div>
+          <ul class="q-bullets">
+            <li>Grew Quality &amp; Compliance Engineering from <strong>15 → 55 FTEs under $6M budget</strong> over 10 years — built four distinct capabilities: QE, compliance engineering, SDLC governance, systems integration</li>
+            <li>Built and chaired the <strong>SDLC Council</strong> — executive governance board aligning engineering, quality, compliance, and business on critical delivery priorities</li>
+            <li>Delivered <strong>AI-powered SDLC intelligence</strong>: 100% requirement-to-deployment traceability, 92% release-risk prediction accuracy</li>
+            <li>Outcomes: <strong>90% audit prep reduction, 40% release frequency increase, 99.99% uptime, zero regulatory findings</strong></li>
+            <li>This was not just delivery — it was org design, governance architecture, AI operationalization, and cultural transformation simultaneously</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The measure of this achievement isn't the metrics — it's that the organization continued to improve after systems and people were in place. That's the sign you've built something that lasts."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q2</span>
+          <span class="q-text">How do you build and scale an engineering organization? <span class="q-tag tag-leadership">Leadership</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Scaling an engineering org is a systems design problem, not a hiring problem. You design the structure first — then hire into it."</span></div>
+          <ul class="q-bullets">
+            <li>Start with <strong>mission, vision, operating model</strong> — not just headcount. Define what the org is for before adding people to it</li>
+            <li>Design the <strong>org topology</strong> to match delivery needs: functional vs product-aligned, platform teams vs stream-aligned teams</li>
+            <li>Build the <strong>governance layer early</strong>: SDLC Council, operating rhythm (MBR/QBR), escalation model — structure enables speed, not the reverse</li>
+            <li>Hire <strong>leaders before ICs</strong> at scale — the right Directors compound; wrong ones create technical debt in the org</li>
+            <li>Measure maturity, not just output: <strong>DORA metrics, compliance posture, team health, delivery predictability</strong></li>
+            <li>15 → 55 FTEs: grew four distinct capabilities as the business evolved — was never just headcount, always a capability expansion</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"A scaled org isn't bigger — it's more capable. Every hire should make the system smarter, not just larger."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q3</span>
+          <span class="q-text">How do you approach platform engineering and developer experience? <span class="q-tag tag-technical">Technical</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Platform engineering is the highest-leverage investment an engineering leader can make. You build once for the whole org — the return compounds with every team that uses it."</span></div>
+          <ul class="q-bullets">
+            <li>Built <strong>reusable integration patterns, CI/CD golden paths, and deployment standards</strong> across Foundation Medicine's regulated platform environment</li>
+            <li>Golden paths embed <strong>compliance controls by default</strong> — teams don't choose between speed and compliance, the path enforces both</li>
+            <li>Outcome: <strong>40% increase in release frequency</strong> as a direct result of platform investment — not despite compliance, because of automated compliance</li>
+            <li>Toolchain: GitHub Actions, Jenkins, OpenTelemetry, Grafana — commodity infrastructure + <strong>custom governance layer on top</strong> for differentiation</li>
+            <li>Platform teams must measure developer experience: <strong>DORA metrics, deployment lead time, test cycle time, platform adoption rate</strong></li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The platform team's job is to make the right thing the easy thing. When that's true, compliance becomes invisible to the developer — it just works."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q4</span>
+          <span class="q-text">How do you use AI to improve engineering operations? <span class="q-tag tag-technical">Technical</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I approach AI in engineering at three levels simultaneously: AI in the product, AI in the operations, and AI in the governance. Most leaders only think about the first one."</span></div>
+          <ul class="q-bullets">
+            <li><strong>AI in the product:</strong> Launched AI-assisted application experience using Claude — helping users understand clinical reports, workflow status, and operational context</li>
+            <li><strong>AI in operations:</strong> Built <strong>AI-powered release-risk prediction model at 92% accuracy</strong> — teams assess risk before a release, not after a failure</li>
+            <li><strong>AI in governance:</strong> Operationalized AI-powered SDLC intelligence — <strong>100% traceability</strong>, automated evidence capture, auditable AI outputs</li>
+            <li>Authored the <strong>enterprise AI policy</strong> for Foundation Medicine — Roche-aligned, FDA-relevant, practical not theoretical</li>
+            <li>Combined outcome: AI enabled reliability, compliance, and velocity simultaneously — <strong>not as separate initiatives, as a unified strategy</strong></li>
+          </ul>
+          <div class="q-closer">Close with: <span>"AI applied to operations is a force multiplier — but only if you govern it. The 92% prediction accuracy is only useful if the organization trusts the output. Governance builds that trust."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q5</span>
+          <span class="q-text">Describe your approach to engineering governance without slowing teams down. <span class="q-tag tag-strategic">Strategic</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"The false premise is that governance and speed are in tension. They're not — bad governance slows teams. Good governance removes friction and ambiguity."</span></div>
+          <ul class="q-bullets">
+            <li>Built the <strong>SDLC Council</strong> — not a committee, a decision-making engine. It aligned 5 functions around one set of delivery priorities and removed ambiguity from every team below it</li>
+            <li>Standardized governance through <strong>golden paths and policy-as-code</strong> — teams follow standards automatically, not manually. Automation removes the friction</li>
+            <li>Result: <strong>40% more releases AND 90% less audit prep simultaneously</strong> — the same governance investment produced both outcomes</li>
+            <li>Key principle: <strong>governance as infrastructure</strong>, not oversight. When controls are automated, engineers don't fight them — they don't notice them</li>
+            <li>Governance must have <strong>executive teeth</strong> — a policy without enforcement is a suggestion. The SDLC Council had decision rights, not just advisory influence</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"When stakeholders trust the data and trust the process, they stop micromanaging delivery. The SDLC Council was the mechanism for building that trust at scale."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q6</span>
+          <span class="q-text">How do you lead a team through a major technical transformation? <span class="q-tag tag-behavioral">Behavioral</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Transformation fails when leaders treat it as a project. It succeeds when leaders design it as a capability shift — the journey changes the org, not just the technology."</span></div>
+          <ul class="q-bullets">
+            <li>FMI transformation: <strong>DevOps and cloud-native adoption</strong> across a regulated, FDA-aligned engineering organization — technically demanding and culturally challenging</li>
+            <li>Sequence: <strong>vision → governance → golden paths → adoption → measurement</strong> — each step created the conditions for the next</li>
+            <li>Change management was built into the platform: <strong>golden paths made the new way the easy way</strong> — no willpower required from teams</li>
+            <li>Embedded QE into DevOps transformation — QE became a <strong>delivery accelerator</strong>, not a quality gate. Changed the team's identity</li>
+            <li>Measured the transformation continuously: DORA baseline → target → achieved — teams could see their own progress</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The hardest part of transformation isn't technology — it's identity. When the team starts saying 'this is how we work' instead of 'this is what we're being asked to do', you've succeeded."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q7</span>
+          <span class="q-text">How do you manage executive stakeholders and build alignment? <span class="q-tag tag-strategic">Strategic</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Executive alignment isn't a conversation — it's a system. You build the forums, the cadence, the shared language, and the data. Then alignment happens continuously, not episodically."</span></div>
+          <ul class="q-bullets">
+            <li>The <strong>SDLC Council</strong> was the system: monthly executive forum with engineering, quality, compliance, and business — shared data, shared priorities, shared accountability</li>
+            <li>Executives don't want updates — they want <strong>confidence</strong>. Confidence comes from consistent, predictable, data-driven reporting</li>
+            <li>Built <strong>executive dashboards</strong> showing compliance posture, reliability, delivery health, and risk — no surprises, always current</li>
+            <li>Managed upward to VP and C-suite on <strong>platform modernization, AI governance, and regulatory posture</strong> simultaneously</li>
+            <li>Key insight: <strong>executive alignment is a system, not a skill</strong> — build the forums, cadence, and shared language so it works without you having to broker every decision</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"When stakeholders trust the data and trust the process, they stop micromanaging delivery. The SDLC Council was the mechanism for building that trust at scale."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q8</span>
+          <span class="q-text">How do you make build vs. buy decisions? <span class="q-tag tag-technical">Technical</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"My framework is: build where it differentiates your business, buy where it commoditizes. The hard work is being honest about which is which."</span></div>
+          <ul class="q-bullets">
+            <li>Evaluate: <strong>strategic differentiation, time to value, TCO, regulatory fit, vendor lock-in risk, integration burden</strong></li>
+            <li>QMS platform: evaluated build vs Veeva. Chose Veeva + compliance config layer — faster to value, proven regulatory track record, reduced build risk in FDA environment</li>
+            <li>CI/CD: chose standard tooling (GitHub Actions, Jenkins) for commodity pipeline + <strong>custom governance layer on top</strong> for compliance differentiation</li>
+            <li>SDLC intelligence: built internally because the use case (predicting release risk from our specific data) was <strong>proprietary and differentiated</strong> — no vendor could offer it</li>
+            <li>Key test: <strong>"Would a competitor buying this same tool close the gap on us?"</strong> If yes, buy. If no, build.</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The mistake most engineering leaders make is building everything because it feels more in control. I've built where it mattered and bought where it didn't — and the outcomes prove it."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q9</span>
+          <span class="q-text">Tell me about a time a project or system failed. What did you do? <span class="q-tag tag-behavioral">Behavioral</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I'll answer this honestly — and I'll also tell you what systemic change it produced."</span></div>
+          <ul class="q-bullets">
+            <li>Use a real incident framing: a production reliability event, a missed release deadline, or a compliance gap discovered during audit</li>
+            <li>Structure: <strong>Situation → What failed → What I did → What changed systemically</strong></li>
+            <li>Built <strong>reliability-by-design practices</strong> (OpenTelemetry, Grafana, risk-based controls) in direct response to incident patterns</li>
+            <li>Built AI-powered <strong>release-risk prediction (92% accuracy)</strong> — explicitly because reactive incident response was not enough; needed to predict and prevent</li>
+            <li>Established <strong>postmortem culture</strong> with blameless RCA → corrective action → systemic change loop</li>
+            <li>Sustained <strong>99.99% uptime</strong> as proof that those systemic changes worked</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The best engineering leaders don't prevent all failures — they build systems that make failures smaller, shorter, and less likely to repeat."</span></div>
+          <div class="q-watchout">Say "we never had failures" or deflect. Interviewers want intellectual honesty and evidence of learning systems.</div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#eff6ff">
+          <span class="q-num" style="background:#3b82f6">Q10</span>
+          <span class="q-text">What's your engineering leadership philosophy? <span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I lead with systems thinking — my job is to design the environment where great engineers do great work, not to be the smartest person in the room."</span></div>
+          <ul class="q-bullets">
+            <li><strong>Systems over heroics:</strong> Build platforms, standards, and operating models that scale — don't rely on individuals to compensate for broken systems</li>
+            <li><strong>Governance as enablement:</strong> The SDLC Council wasn't bureaucracy — it was the mechanism that accelerated decisions and removed ambiguity</li>
+            <li><strong>Measure everything:</strong> 40% velocity improvement, 90% audit reduction, 99.99% uptime, 92% prediction accuracy — if you can't measure it, you can't improve it</li>
+            <li><strong>Compliance as architecture:</strong> Security and compliance embedded into design, not layered on top — this is what enables speed in regulated environments</li>
+            <li><strong>Grow the bench:</strong> 15 → 55 FTEs wasn't just headcount — it was building leaders who could lead leaders</li>
+            <li><strong>AI-native thinking:</strong> Applied AI to operations, product, and governance simultaneously — not as a project, as a capability</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"Ultimately, my job is to make the org more capable than I found it — and leave behind systems and people that don't need me to function."</span></div>
+        </div>
+      </div>
+    </div><!-- end swe pane -->
+
+    <!-- QE / AI GOVERNANCE TRACK -->
+    <div class="interview-pane" id="interview-qe" role="tabpanel">
+      <div class="track-intro">Track: <strong>Sr. Director — AI Governance &amp; Quality Transformation</strong> — Responsible AI · AI/ML Governance · SDLC Governance · Regulated Digital Health · Enterprise Risk &amp; Compliance</div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q1</span>
+          <span class="q-text">Walk me through how you built a quality engineering function. <span class="q-tag tag-behavioral">Behavioral</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I built Foundation Medicine's Quality Engineering function from a blank page — no team, no model, no tooling — into a 55-person strategic enterprise capability."</span></div>
+          <ul class="q-bullets">
+            <li>Started with defining <strong>mission, vision, operating model, team structure, and execution roadmap</strong> — not just hiring people</li>
+            <li>Grew from <strong>15 → 55 FTEs under $6M budget</strong> over 10 years — four distinct capabilities: quality engineering, compliance engineering, SDLC governance, systems integration</li>
+            <li>Embedded the function into FMI's DevOps transformation — <strong>QE became a delivery accelerator, not a quality gate</strong></li>
+            <li>Built AI-powered SDLC intelligence: <strong>100% traceability, 92% release-risk prediction accuracy</strong></li>
+            <li>Established the <strong>SDLC Council</strong> — giving quality a seat at the engineering strategy table</li>
+            <li>Outcomes: <strong>90% audit prep reduction, 40% release frequency increase, zero regulatory findings, 99.99% uptime</strong></li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The measure of a quality engineering function isn't how many bugs it catches — it's how much faster and safer it makes delivery. That's the bar I built to."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q2</span>
+          <span class="q-text">Tell me about your AI governance and responsible AI work. <span class="q-tag tag-technical">Technical</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I built responsible AI governance from the ground up at Foundation Medicine — policy, operational guidance, and FDA-aligned controls, all in a regulated environment."</span></div>
+          <ul class="q-bullets">
+            <li><strong>Authored the enterprise AI policy</strong> for Foundation Medicine — leveraging Roche-aligned principles to govern responsible, compliant, scalable AI adoption</li>
+            <li><strong>Translated policy into practice</strong> — established practical day-to-day AI usage guidance that teams actually follow, not a document that sits on a shelf</li>
+            <li><strong>Established governance models</strong> for responsible AI usage, data quality, and AI-assisted engineering workflows — aligned with FDA and global regulatory expectations</li>
+            <li>Applied AI governance to <strong>SDLC intelligence</strong>: ensured AI-predicted release risk was auditable, explainable, and aligned to compliance requirements</li>
+            <li>Three layers: <strong>policy → practice → product</strong> — I've worked at all three simultaneously</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"Most organizations have AI ambition without governance. In a regulated environment, that's a regulatory liability. I built the governance first — then enabled the ambition safely."</span></div>
+          <div class="q-watchout">Stay too abstract. Ground every governance answer in a specific outcome or artifact (the policy doc, the training, the framework).</div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q3</span>
+          <span class="q-text">How do you achieve compliance-by-design rather than compliance-as-overlay? <span class="q-tag tag-technical">Technical</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Compliance-as-overlay means your engineers build, then compliance reviews. Compliance-by-design means compliance evidence is generated automatically as engineers build."</span></div>
+          <ul class="q-bullets">
+            <li>Built <strong>policy-as-code pipelines</strong> — compliance evidence is automatically captured at every merge, build, and deployment</li>
+            <li>Embedded <strong>audit logging and deep traceability patterns</strong> into the engineering architecture — not added at release time</li>
+            <li>Result: <strong>continuous audit readiness</strong> — not a burst of activity before every audit</li>
+            <li>Reduced audit preparation time by <strong>90%</strong> — because the evidence already existed, automatically</li>
+            <li>Release frequency <strong>increased 40% simultaneously</strong> — the automated controls removed the manual bottleneck</li>
+            <li>Sustained <strong>zero regulatory findings</strong> — not because auditors were lenient, because the architecture was correct</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"Compliance-by-design is a technical architecture decision, not a process decision. Once you make it, compliance stops being a cost and starts being a capability."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q4</span>
+          <span class="q-text">How have you used data and AI to improve quality outcomes? <span class="q-tag tag-technical">Technical</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I operationalized AI-powered SDLC intelligence as a core enterprise capability — not a dashboard, a decision-support system for release engineering."</span></div>
+          <ul class="q-bullets">
+            <li>Built AI-powered <strong>release-risk prediction model at 92% accuracy</strong> — teams could assess risk before a release, not after</li>
+            <li>Achieved <strong>100% traceability</strong> from requirement → test → deployment — every artifact linked, every change auditable</li>
+            <li>Used telemetry from <strong>OpenTelemetry, Grafana</strong> to detect and reduce incident response times — reliability-by-design</li>
+            <li>AI-powered intelligence enabled: <strong>shift-left, predict, prevent</strong> rather than detect-and-fix</li>
+            <li>Combined outcome: <strong>99.99% uptime + zero regulatory findings + 40% more releases</strong> — AI was a direct enabler of all three</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"92% release-risk prediction accuracy means you're not just measuring quality — you're predicting it. That changes the entire conversation from reactive reporting to proactive engineering."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q5</span>
+          <span class="q-text">How do you lead SDLC governance across a large engineering organization? <span class="q-tag tag-strategic">Strategic</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"SDLC governance at scale only works if it's a system with real executive teeth — not a policy document and a hope."</span></div>
+          <ul class="q-bullets">
+            <li>Built and chaired the <strong>SDLC Council</strong> — executive governance board spanning engineering, quality, compliance, and business</li>
+            <li>Standardized <strong>release governance, CI/CD guardrails, and engineering controls</strong> across the entire regulated platform environment</li>
+            <li>Embedded standards through <strong>golden paths and policy-as-code</strong> — teams followed standards automatically, not manually</li>
+            <li>Achieved <strong>100% traceability</strong> — every requirement, test, and deployment linked and auditable</li>
+            <li>Conducted <strong>Roche QMS gap analysis</strong> — strengthened ServiceNow-aligned incident management for enterprise integration</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The SDLC Council was the single most important governance investment I made — it aligned 5 functions around one set of delivery priorities and made quality everyone's responsibility."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#fef3c7">
+          <span class="q-num" style="background:#f59e0b">Q6</span>
+          <span class="q-text">How do you balance speed and quality in a regulated delivery pipeline? <span class="q-tag tag-technical">Technical</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"I reject the premise that it's a balance — it's an architecture choice. The right architecture gives you both."</span></div>
+          <ul class="q-bullets">
+            <li>Automated compliance evidence via <strong>policy-as-code</strong> — removed manual gates that were the real bottleneck</li>
+            <li>Result: <strong>audit prep -90% AND release frequency +40% — simultaneously</strong></li>
+            <li>Standardized CI/CD golden paths embedded release controls — teams didn't choose between speed and compliance, the path enforced both</li>
+            <li>AI-powered <strong>release-risk scoring (92% accuracy)</strong> — teams could make faster release decisions with more confidence</li>
+            <li>Core principle: <strong>every manual compliance step is a latency tax</strong>. Automate the tax, and speed becomes the default.</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"90% reduction in audit prep and 40% more releases isn't a compromise between speed and quality — it's proof that when you engineer compliance correctly, you get both for free."</span></div>
+        </div>
+      </div>
+    </div><!-- end qe pane -->
+
+    <!-- GENERAL LEADERSHIP TRACK -->
+    <div class="interview-pane" id="interview-general" role="tabpanel">
+      <div class="track-intro">Track: <strong>General Engineering Leadership</strong> — People Management · Conflict Resolution · Career Development · Communication · Leadership Under Pressure</div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#f0fdf4">
+          <span class="q-num" style="background:#10b981">Q1</span>
+          <span class="q-text">How do you develop and grow engineering talent? <span class="q-tag tag-leadership">Leadership</span><span class="q-tag tag-behavioral">Behavioral</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"My philosophy is simple: I hire people who are better than me in their domains, then remove every obstacle in their way. My job is to build the conditions — not be the ceiling."</span></div>
+          <ul class="q-bullets">
+            <li>Built a <strong>leadership pipeline</strong> inside the QE org: promoted ICs to leads, leads to managers, managers to Directors — internal growth, not just external hiring</li>
+            <li>Every 1:1 has two dimensions: <strong>short-term delivery health and long-term career growth</strong> — both on the agenda every time</li>
+            <li>Use <strong>stretch assignments intentionally</strong> — not as punishment, as acceleration. Let people lead something before they're ready with support in place</li>
+            <li>Built a <strong>talent review process</strong> — 9-box model, succession planning for key roles, explicit investment decisions for high-potential talent</li>
+            <li>Metric: internal promotion rate. If people grow into bigger roles, the development system is working.</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The best measure of a leader isn't their own performance — it's how many leaders they've developed. That's the compounding return."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#f0fdf4">
+          <span class="q-num" style="background:#10b981">Q2</span>
+          <span class="q-text">Tell me about a time you had to make a hard decision with incomplete information. <span class="q-tag tag-behavioral">Behavioral</span><span class="q-tag tag-strategic">Strategic</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"The hardest leadership decisions are never about having all the information — they're about knowing when you have enough to act, and the courage to own the outcome."</span></div>
+          <ul class="q-bullets">
+            <li>Frame a real scenario: a release go/no-go under compliance pressure, a major vendor decision, a significant org restructure</li>
+            <li>Show your <strong>decision framework</strong>: what data you had, what risks you accepted, what mitigations you put in place</li>
+            <li>The <strong>AI-powered release-risk model</strong> was itself born from a decision made with incomplete data — we committed to building it before proving its accuracy, because the alternative (reactive incident response) had a known cost</li>
+            <li>After the decision: <strong>communicate clearly, own the outcome, adjust quickly if wrong</strong></li>
+          </ul>
+          <div class="q-closer">Close with: <span>"Speed of decision is often more valuable than perfection of decision. The cost of delay is rarely visible — but it's always real."</span></div>
+        </div>
+      </div>
+
+      <div class="q-block" onclick="toggleQ(this)">
+        <div class="q-header" style="background:#f0fdf4">
+          <span class="q-num" style="background:#10b981">Q3</span>
+          <span class="q-text">How do you handle conflict between engineering and product or business stakeholders? <span class="q-tag tag-behavioral">Behavioral</span><span class="q-tag tag-leadership">Leadership</span></span>
+          <span class="q-arrow" aria-hidden="true">▼</span>
+        </div>
+        <div class="q-answer">
+          <div class="q-opener">Open with: <span>"Most engineering-product conflict is actually a shared-data problem. When everyone sees the same constraint clearly, the conflict becomes a trade-off conversation — which is much more productive."</span></div>
+          <ul class="q-bullets">
+            <li>Make trade-offs <strong>visible and explicit</strong>: if we ship feature X this sprint, what does that do to reliability, technical debt, or compliance posture?</li>
+            <li>Built the <strong>SDLC Council</strong> specifically to surface these trade-offs at the executive level — no more back-room lobbying or siloed priorities</li>
+            <li>Establish <strong>shared language</strong>: engineering capacity is finite, not negotiable. The conversation is "what do we do with this capacity?" not "can you just do more?"</li>
+            <li>Use data: <strong>capacity allocation plans, RAID logs, delivery forecasts</strong> — when the conversation is about facts, it's less personal</li>
+          </ul>
+          <div class="q-closer">Close with: <span>"The goal isn't to win arguments with product — it's to build shared clarity so we make better decisions together. The SDLC Council made that structural, not dependent on any individual relationship."</span></div>
+        </div>
+      </div>
+    </div><!-- end general pane -->
+
+  </div><!-- end interview body -->
+</section>
+
+<div class="section-divider"><hr class="section-sep"></div>
+
+
+<!-- ══════════════ EXPERIENCE MAP ══════════════ -->
+<section class="section" id="expmap" aria-labelledby="expmap-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Resume Intelligence</div>
+    <h2 class="section-title" id="expmap-title">Experience Mapping</h2>
+    <p class="section-sub">Your resume evidence mapped against ideal role requirements — with strength ratings and gap assessments.</p>
+  </div>
+
+  <div class="expmap-track-tabs" role="tablist" aria-label="Experience map tracks">
+    <button class="expmap-track-tab active" onclick="switchExpMap('swe',this)" role="tab">SWE Track</button>
+    <button class="expmap-track-tab" onclick="switchExpMap('qe',this)" role="tab">QE / AI Governance Track</button>
+  </div>
+  <div class="expmap-body">
+
+    <!-- SWE EXPMAP PANE -->
+    <div class="expmap-pane active" id="expmap-swe" role="tabpanel">
+      <div class="track-intro">Resume: <strong>ViharNar_Resume_2026v4_SWE.pdf</strong> &nbsp;·&nbsp; Target: <strong>Senior Director of Software Engineering</strong> &nbsp;·&nbsp; Platform Engineering · AI Engineering · DevSecOps · Org Scaling</div>
+      <div class="expmap-table-wrap">
+        <table class="expmap-table" role="table" aria-label="SWE experience mapping">
+          <thead>
+            <tr>
+              <th scope="col">Ideal Responsibility</th>
+              <th scope="col">What the Role Expects</th>
+              <th scope="col">Your Evidence</th>
+              <th scope="col">Strength & Gap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Platform Engineering & Scalable Architecture</td>
+              <td>Design and evolve platform foundations that enable teams to build faster — reusable patterns, golden paths, integration layers</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE (2025–Present)</strong>"Directed platform modernization through reusable integration patterns, deployment standards, and strict engineering guardrails."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Built the target-state architecture for a workflow orchestration platform, integrating disparate internal and external systems across FMI's clinical and enterprise domains."</span>
+              </td>
+              <td>
+                <span class="str-pill str-str">Strong</span>
+                <span class="gap-tag gap-minor">⚡ Add explicit mention of platform scale (# of services, teams served, or traffic volume)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>AI Engineering Strategy & Responsible AI</td>
+              <td>Define AI use cases, set platform foundations for AI-enabled systems, establish responsible AI controls and governance</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Launched an AI-assisted application experience using Claude to help users understand clinical reports, workflow status, and operational context."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Defined the engineering strategy for AI-enabled workflows, establishing platform foundations and responsible AI controls."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Operationalized AI-powered SDLC intelligence at enterprise scale, achieving 100% traceability and 92% release-risk prediction accuracy."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Three distinct AI signals: product, strategy, and operations — rare combination</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Engineering Org Leadership & Talent</td>
+              <td>Build, scale, and develop the engineering team — hiring, career development, budget ownership, org design</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Grew enterprise quality and compliance engineering from 15 to 55 FTEs (budget &lt;$6M), establishing it as a strategic engineering capability spanning quality, SDLC governance, and systems integration."</span>
+              </td>
+              <td>
+                <span class="str-pill str-str">Strong</span>
+                <span class="gap-tag gap-minor">⚡ Large org build is proven — note current SWE team size explicitly</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Executive Governance & Cross-Functional Alignment</td>
+              <td>Establish review boards, chair executive forums, align engineering with product, business, compliance, and executive stakeholders</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Built and led the SDLC Council, an executive governance board that aligned engineering, quality, and business stakeholders on critical delivery priorities."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Chaired a real executive governance board — very strong signal for Sr Dir+</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Architecture & Build vs Buy Decisions</td>
+              <td>Evaluate major platform decisions with technical and financial rigor</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Directed platform modernization through reusable integration patterns, deployment standards, and strict engineering guardrails."</span>
+              </td>
+              <td>
+                <span class="str-pill str-mod">Moderate</span>
+                <span class="gap-tag gap-notable">⚠ Gap — add one concrete Build vs Buy example with TCO comparison and outcome</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Compliance-by-Design & Secure SDLC</td>
+              <td>Embed security, compliance, and audit controls into engineering architecture — not as overlays but as foundational design patterns</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Embedded compliance-by-design through automated evidence capture, audit logging, and deep traceability patterns supporting continuous audit readiness."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Decreased audit preparation time by 90% and increased release frequency by 40% through policy-as-code pipelines and automated evidence capture."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Dual quantified outcomes (90% + 40%) + architecture-level language</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Engineering Transformation Programs</td>
+              <td>Lead end-to-end modernization: cloud migration, DevSecOps adoption, legacy-to-modern delivery, platform upgrades</td>
+              <td>
+                <span class="quote-chip"><strong>Capgemini — Manager (DTCC)</strong>"Led software delivery, quality engineering, and modernization efforts for regulated enterprise platforms, including DTCC's CTM financial systems."</span>
+              </td>
+              <td>
+                <span class="str-pill str-str">Strong</span>
+                <span class="gap-tag gap-minor">⚡ Add a specific "from X to Y" outcome for the Capgemini transformation</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="expmap-summary">
+        <div class="expmap-sum-card" style="background:#f0fdf4;border:1px solid #86efac;">
+          <div style="font-weight:700;color:#15803d;margin-bottom:12px;font-size:14px;">✅ SWE Track — Your Strongest Signals</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:#166534;line-height:2;">
+            <li>◆ Target-state architecture (workflow orchestration platform)</li>
+            <li>◆ Platform engineering (+40% dev velocity, CI/CD golden paths)</li>
+            <li>◆ Compliance-by-design (90% audit reduction, zero findings)</li>
+            <li>◆ AI engineering — product, strategy, and SDLC intelligence</li>
+            <li>◆ Executive governance (SDLC Council founder + chair)</li>
+            <li>◆ Operating model design (built function from 0→55 FTEs)</li>
+          </ul>
+        </div>
+        <div class="expmap-sum-card" style="background:#fff7ed;border:1px solid #fdba74;">
+          <div style="font-weight:700;color:#c2410c;margin-bottom:12px;font-size:14px;">⚡ SWE Track — What to Sharpen</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:#9a3412;line-height:2;">
+            <li>◆ Add a Build vs Buy example with specific TCO or vendor decision context</li>
+            <li>◆ State current SWE org size explicitly (team count under you now)</li>
+            <li>◆ Add MTTR or SLO number alongside the 99.99% uptime stat</li>
+            <li>◆ Quantify Capgemini transformation outcome (e.g., % delivery improvement)</li>
+            <li>◆ Add a line tying platform velocity (+40%) to revenue or time-to-market</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- QE EXPMAP PANE -->
+    <div class="expmap-pane" id="expmap-qe" role="tabpanel">
+      <div class="track-intro">Resume: <strong>ViharNar_Resume_2026v4_QEAI.pdf</strong> &nbsp;·&nbsp; Target: <strong>Senior Director — AI Governance &amp; Quality Transformation</strong> &nbsp;·&nbsp; Responsible AI | AI/ML Governance | SDLC Governance | Regulated Digital Health</div>
+      <div class="expmap-table-wrap">
+        <table class="expmap-table" role="table" aria-label="QE experience mapping">
+          <thead>
+            <tr>
+              <th scope="col">Ideal Responsibility</th>
+              <th scope="col">What the Role Expects</th>
+              <th scope="col">Your Evidence</th>
+              <th scope="col">Strength & Gap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>QE Strategy, Vision & Operating Model</td>
+              <td>Define the quality engineering mission, team model, toolchain, and execution roadmap that makes quality a strategic capability, not a bottleneck</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE (2015–2025)</strong>"Built Foundation Medicine's Quality Engineering function from scratch, establishing the mission, vision, operating model, team structure, and execution roadmap."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Built from zero — mission + vision + model + roadmap explicitly called out</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Risk-Based Quality Framework & Controls Design</td>
+              <td>Build risk-tiered quality controls — preventive vs detective, manual vs automated — that scale without adding friction to delivery</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE (2025–Present)</strong>"Standardized release governance, CI/CD guardrails, and engineering controls across a regulated platform environment supporting approximately $38M in annual revenue."</span>
+                <span class="quote-chip"><strong>Technical Skills</strong>"Policy-as-Code, Compliance-by-Design, Traceability, Automated Evidence Capture, Risk-Based Controls, Release Governance"</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Revenue-backed controls framing ($38M) + technical skills list matches exactly</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Audit Readiness & Compliance-by-Design</td>
+              <td>Own the audit posture — zero findings, automated evidence, continuous readiness — embedded into delivery pipelines, not bolted on</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Secured continuous audit readiness by embedding compliance-by-design into the engineering architecture through automated evidence capture, strict audit logging, and deep traceability patterns."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Protected critical revenue streams by sustaining 99.99% uptime on diagnostic platforms, maintaining an impeccable record of zero regulatory findings."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ "Continuous" + "embedded" language + zero findings + 99.99% uptime is uniquely strong</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Quality Transformation — Automation & Policy-as-Code</td>
+              <td>Drive shift-left quality, automate test and compliance evidence, replace manual gates with intelligent pipelines</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Slashed audit preparation time by 90% and increased release frequency by 40% by designing and rolling out policy-as-code pipelines."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Embedded engineering quality practices into FMI's DevOps and cloud-native transformation, fundamentally strengthening modern software delivery."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Dual quantified outcomes (90% + 40%) are top-tier proof points for any QE transformation role</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Responsible AI & AI/ML Governance</td>
+              <td>Author enterprise AI policy, establish model governance, data quality governance, human-in-the-loop controls, drift monitoring</td>
+              <td>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Authored the enterprise AI policy for Foundation Medicine, leveraging Roche-aligned principles to govern responsible, compliant, and scalable AI adoption."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir SWE</strong>"Established practical guidance for AI usage across engineering and business workflows, successfully translating enterprise AI principles into daily operational practice."</span>
+                <span class="quote-chip"><strong>FMI — Sr Dir QCE</strong>"Established governance models for responsible AI usage, data quality, and AI-assisted engineering workflows aligned with FDA and global regulatory expectations."</span>
+              </td>
+              <td>
+                <span class="str-pill str-exc">Exceptional</span>
+                <span class="gap-tag gap-none">✅ Authored policy + operationalized guidance + FDA-aligned — three-level proof. Rare differentiator.</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="expmap-summary">
+        <div class="expmap-sum-card" style="background:#f0fdf4;border:1px solid #86efac;">
+          <div style="font-weight:700;color:#15803d;margin-bottom:12px;font-size:14px;">✅ QE Track — Your Strongest Signals</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:#166534;line-height:2;">
+            <li>◆ QE function built from zero — mission + model + roadmap</li>
+            <li>◆ Compliance-by-design with zero regulatory findings</li>
+            <li>◆ Policy-as-code delivering 90% audit reduction + 40% velocity</li>
+            <li>◆ AI governance — authored enterprise policy, FDA-aligned</li>
+            <li>◆ SDLC intelligence — 92% prediction accuracy, 100% traceability</li>
+            <li>◆ Revenue-backed: $38M platform, 99.99% uptime</li>
+          </ul>
+        </div>
+        <div class="expmap-sum-card" style="background:#fff7ed;border:1px solid #fdba74;">
+          <div style="font-weight:700;color:#c2410c;margin-bottom:12px;font-size:14px;">⚡ QE Track — What to Sharpen</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:#9a3412;line-height:2;">
+            <li>◆ Quantify model drift monitoring experience more explicitly</li>
+            <li>◆ Add a line on human-in-the-loop AI controls specifically</li>
+            <li>◆ Cite ISO 14971 or risk management framework experience if applicable</li>
+            <li>◆ Reference MLCC or AI validation tooling if used</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end expmap body -->
+</section>
+
+<div class="section-divider"><hr class="section-sep"></div>
+
+
+<!-- ══════════════ TECH REFERENCE ══════════════ -->
+<section class="section" id="techref" aria-labelledby="techref-title">
+  <div class="section-header">
+    <div class="section-eyebrow">Technical Reference</div>
+    <h2 class="section-title" id="techref-title">Technology Reference Guide</h2>
+    <p class="section-sub">Languages · Databases · Middleware · UI/Frontend · Infrastructure · ALM · Architecture · Org Maturity · AI / MLOps</p>
+  </div>
+</section>
+
+<div style="max-width:var(--content-max);margin:0 auto;padding:0 24px 80px">
+  <div class="techref-tab-bar" role="tablist" aria-label="Technology domains">
+    <button class="techref-tab active" onclick="switchTech('lang',this)" role="tab">Languages</button>
+    <button class="techref-tab" onclick="switchTech('db',this)" role="tab">Databases</button>
+    <button class="techref-tab" onclick="switchTech('mw',this)" role="tab">Middleware</button>
+    <button class="techref-tab" onclick="switchTech('ui',this)" role="tab">UI / Frontend</button>
+    <button class="techref-tab" onclick="switchTech('infra',this)" role="tab">Infrastructure</button>
+    <button class="techref-tab" onclick="switchTech('alm',this)" role="tab">ALM Toolsets</button>
+    <button class="techref-tab" onclick="switchTech('arch',this)" role="tab">Architecture</button>
+    <button class="techref-tab" onclick="switchTech('maturity',this)" role="tab">Org Maturity</button>
+    <button class="techref-tab" onclick="switchTech('mlops',this)" role="tab">AI / MLOps</button>
+  </div>
+
+  <div class="techref-body">
+
+    <!-- LANGUAGES -->
+    <div class="techref-pane active" id="tech-lang" role="tabpanel">
+      <div class="techref-intro">Common programming languages — what they are, what type they are, and what they're used for. The most practical ones to know today: <strong>Python · JavaScript · TypeScript · SQL · Java · Go</strong></div>
+      <div class="techref-table-wrap">
+        <table class="techref-table" role="table">
+          <thead><tr><th>Language</th><th>Type</th><th>Definition</th><th>Best For</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Python</td><td><span class="pill-type pill-interpreted">Interpreted</span></td><td>High-level, readable, fast to write</td><td>AI/ML, data, scripting, backend APIs</td><td>Data pipelines, ML models, FastAPI</td></tr>
+            <tr><td>JavaScript</td><td><span class="pill-type pill-interpreted">Interpreted</span></td><td>The language of the browser; also runs server-side via Node.js</td><td>Web frontend, interactive UIs, backend APIs</td><td>React apps, Node.js APIs, browser logic</td></tr>
+            <tr><td>TypeScript</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>JavaScript with static typing — catches errors earlier</td><td>Large-scale web apps, safer JS development</td><td>Enterprise portals, React/Angular apps</td></tr>
+            <tr><td>Java</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Object-oriented, platform-portable — "write once, run anywhere"</td><td>Enterprise backends, Android, large platforms</td><td>Banking systems, ERP backends, Spring Boot</td></tr>
+            <tr><td>C#</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Microsoft's modern object-oriented language</td><td>Enterprise apps, .NET backends, game dev</td><td>Azure apps, ASP.NET APIs, Unity games</td></tr>
+            <tr><td>Go</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Fast, simple, built for concurrency — designed for cloud era</td><td>Cloud services, infrastructure tools, microservices</td><td>Kubernetes tooling, Docker, cloud-native APIs</td></tr>
+            <tr><td>Rust</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Systems language enforcing memory safety without garbage collection</td><td>Secure systems, infrastructure, performance-critical tools</td><td>WebAssembly, OS-level tooling, embedded</td></tr>
+            <tr><td>SQL</td><td><span class="pill-type pill-query">Query</span></td><td>Standard language for querying and managing relational databases</td><td>Data retrieval, reporting, analytics, CRUD</td><td>SELECT * FROM patients WHERE status='active'</td></tr>
+            <tr><td>R</td><td><span class="pill-type pill-interpreted">Interpreted</span></td><td>Built specifically for statistics and data analysis</td><td>Statistical computing, data science, research</td><td>Clinical trial analysis, genomics, visualization</td></tr>
+            <tr><td>Bash / Shell</td><td><span class="pill-type pill-scripting">Scripting</span></td><td>Command-line scripting for Unix/Linux systems</td><td>DevOps, automation, server administration</td><td>CI/CD scripts, cron jobs, deployment scripts</td></tr>
+            <tr><td>Swift</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Apple's modern language — replaces Objective-C</td><td>iOS, macOS, watchOS apps</td><td>Native iPhone apps, Mac utilities</td></tr>
+            <tr><td>Kotlin</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>Modern JVM language — preferred for Android</td><td>Android apps, JVM backends</td><td>Android apps, Spring Boot services</td></tr>
+            <tr><td>Scala</td><td><span class="pill-type pill-compiled">Compiled</span></td><td>JVM language blending OO and functional styles</td><td>Big data, distributed systems</td><td>Apache Spark, Kafka Streams</td></tr>
+            <tr><td>Julia</td><td><span class="pill-type pill-jit">JIT Compiled</span></td><td>High-performance language for numerical computing</td><td>Scientific computing, ML, simulations</td><td>Genomics research, physics simulations</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">Quick Grouping by Use Case</div>
+      <div class="techref-grid">
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Web Frontend</span><h4>JavaScript · TypeScript · Dart</h4><p>JavaScript runs in the browser. TypeScript makes it safer for large codebases. Dart powers Flutter web.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Enterprise Backend</span><h4>Java · C# · Go · Python · Kotlin</h4><p>Java and C# dominate large enterprise. Go for cloud-native services. Python for APIs and automation.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#15803d">Data / AI / Analytics</span><h4>Python · R · SQL · Julia</h4><p>Python is dominant. SQL is universal. R for statistics. Julia for heavy computation.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fef3c7;color:#92400e">Systems / Infrastructure</span><h4>C · C++ · Rust · Go</h4><p>C and C++ for hardware-adjacent. Rust for memory-safe systems. Go for infrastructure tooling.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#fee2e2;color:#991b1b">Mobile</span><h4>Swift · Kotlin · Dart · React Native</h4><p>Swift = iOS, Kotlin = Android. Dart/Flutter and React Native for cross-platform.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f1f5f9;color:#475569">DevOps / Automation</span><h4>Bash · Python · HCL (Terraform) · YAML</h4><p>Shell scripts and Python for automation. HCL for infrastructure-as-code. YAML for CI/CD pipelines.</p></div>
+      </div>
+    </div>
+
+    <!-- DATABASES -->
+    <div class="techref-pane" id="tech-db" role="tabpanel">
+      <div class="techref-intro">Databases store and retrieve data. The most important thing to know: <strong>SQL (relational) vs NoSQL (non-relational)</strong> — each has distinct strengths. Today you also need to know <strong>vector databases</strong> for AI/LLM use cases.</div>
+      <div class="techref-group-h">Relational (SQL) Databases</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Database</th><th>Type</th><th>Best For</th><th>Examples of Use</th></tr></thead>
+          <tbody>
+            <tr><td>PostgreSQL</td><td>Relational / SQL</td><td>Complex queries, ACID compliance, JSON support — versatile and trusted</td><td>Financial apps, healthcare platforms, most enterprise systems</td></tr>
+            <tr><td>MySQL</td><td>Relational / SQL</td><td>Web applications, simple and fast reads</td><td>WordPress, e-commerce, SaaS backends</td></tr>
+            <tr><td>Microsoft SQL Server</td><td>Relational / SQL</td><td>Enterprise Windows environments, BI tooling, .NET stacks</td><td>ERP systems, corporate data warehouses</td></tr>
+            <tr><td>Oracle DB</td><td>Relational / SQL</td><td>Large enterprise, high-concurrency, strict compliance requirements</td><td>Banking, government, pharma systems</td></tr>
+            <tr><td>SQLite</td><td>Relational / SQL</td><td>Embedded, lightweight — single file, no server needed</td><td>Mobile apps, local dev, testing, IoT devices</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">NoSQL Databases</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Database</th><th>Type</th><th>Best For</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>MongoDB</td><td>Document (JSON)</td><td>Flexible schemas, rapid development, nested data structures</td><td>Content platforms, user profiles, catalogs</td></tr>
+            <tr><td>Redis</td><td>In-Memory Key-Value</td><td>Caching, real-time data, sessions, leaderboards</td><td>API caching, pub/sub, rate limiting</td></tr>
+            <tr><td>Cassandra</td><td>Wide Column</td><td>Massive write throughput, distributed, high availability</td><td>IoT telemetry, time-series events, social feeds</td></tr>
+            <tr><td>DynamoDB</td><td>Key-Value / Document</td><td>Serverless scale, AWS-native, predictable performance</td><td>Serverless apps, event stores, gaming</td></tr>
+            <tr><td>Elasticsearch</td><td>Search Engine</td><td>Full-text search, log analytics, observability</td><td>Application search, ELK stack, log platforms</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">AI / Vector Databases</div>
+      <div class="techref-grid">
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Pinecone</span><h4>Managed Vector DB</h4><p>Purpose-built for storing and querying embeddings. Ideal for production RAG systems and semantic search.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Weaviate</span><h4>Open-Source Vector DB</h4><p>Combines vector search with GraphQL querying. Good for semantic search with hybrid filtering.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">pgvector</span><h4>PostgreSQL Extension</h4><p>Add vector search to an existing Postgres database. Pragmatic choice when you already run Postgres.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#15803d">Milvus</span><h4>Open-Source Vector DB</h4><p>High-performance, cloud-native. Good for very large embedding datasets and enterprise deployments.</p></div>
+      </div>
+    </div>
+
+    <!-- MIDDLEWARE -->
+    <div class="techref-pane" id="tech-mw" role="tabpanel">
+      <div class="techref-intro">Middleware is software that connects different systems, services, or components — the "plumbing" that makes integration possible. Key categories: <strong>message brokers, API gateways, integration platforms, and workflow engines</strong>.</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Tool / Platform</th><th>Category</th><th>What It Does</th><th>Best Used For</th></tr></thead>
+          <tbody>
+            <tr><td>Apache Kafka</td><td>Message Broker</td><td>High-throughput, distributed event streaming platform</td><td>Real-time data pipelines, event-driven architectures, audit log streaming</td></tr>
+            <tr><td>RabbitMQ</td><td>Message Broker</td><td>AMQP-based message queue with flexible routing</td><td>Decoupled microservices, task queues, reliable async messaging</td></tr>
+            <tr><td>AWS SQS / SNS</td><td>Cloud Messaging</td><td>Managed queue (SQS) and pub/sub (SNS) on AWS</td><td>Serverless workflows, event fan-out, cloud-native decoupling</td></tr>
+            <tr><td>Kong / AWS API Gateway</td><td>API Gateway</td><td>Central gateway for routing, rate limiting, auth, and observability for APIs</td><td>Microservice ingress, API security, traffic management</td></tr>
+            <tr><td>MuleSoft</td><td>Integration Platform</td><td>Enterprise iPaaS for connecting systems, APIs, and data</td><td>Enterprise system integration, legacy modernization, Salesforce ecosystems</td></tr>
+            <tr><td>Apache Camel</td><td>Integration Framework</td><td>Open-source integration framework with 300+ connectors</td><td>Java-based enterprise integration, ETL, protocol mediation</td></tr>
+            <tr><td>Apache Airflow</td><td>Workflow Orchestration</td><td>DAG-based workflow scheduler for data pipelines</td><td>ML pipelines, ETL orchestration, scheduled data workflows</td></tr>
+            <tr><td>Temporal</td><td>Workflow Engine</td><td>Durable, fault-tolerant workflow and activity orchestration</td><td>Long-running business processes, microservice orchestration, saga patterns</td></tr>
+            <tr><td>Nginx</td><td>Load Balancer / Reverse Proxy</td><td>High-performance reverse proxy, load balancer, and static file server</td><td>Ingress routing, SSL termination, caching, horizontal scaling</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- UI / FRONTEND -->
+    <div class="techref-pane" id="tech-ui" role="tabpanel">
+      <div class="techref-intro">Frontend and UI technologies determine what users see and interact with. Key frameworks today: <strong>React (dominant), Vue.js, Angular</strong> for web; <strong>React Native, Flutter</strong> for mobile.</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Technology</th><th>Category</th><th>Definition</th><th>Best For</th><th>Used By</th></tr></thead>
+          <tbody>
+            <tr><td>React</td><td>JS Framework</td><td>Component-based UI library by Meta — declarative, virtual DOM</td><td>SPAs, dashboards, complex interactive UIs</td><td>Facebook, Airbnb, Netflix</td></tr>
+            <tr><td>Next.js</td><td>React Framework</td><td>Full-stack React framework — SSR, SSG, API routes, file-based routing</td><td>Production web apps, SEO-optimized sites, marketing sites</td><td>Vercel, major SaaS products</td></tr>
+            <tr><td>Vue.js</td><td>JS Framework</td><td>Progressive, approachable framework — easy learning curve</td><td>Internal tools, smaller teams, gradual adoption</td><td>GitLab, Alibaba</td></tr>
+            <tr><td>Angular</td><td>JS Framework</td><td>Full-featured TypeScript framework by Google — opinionated and enterprise-grade</td><td>Large enterprise apps, regulated environments, strict standards</td><td>Google, enterprise apps</td></tr>
+            <tr><td>React Native</td><td>Mobile Framework</td><td>Build iOS and Android apps using React and JavaScript</td><td>Cross-platform mobile with code sharing across web and mobile</td><td>Meta, Shopify</td></tr>
+            <tr><td>Flutter</td><td>Mobile Framework</td><td>Google's Dart-based UI toolkit — renders to native on all platforms</td><td>Pixel-perfect cross-platform apps (iOS, Android, web, desktop)</td><td>Google Pay, Alibaba</td></tr>
+            <tr><td>Tailwind CSS</td><td>CSS Framework</td><td>Utility-first CSS framework — compose styles without writing custom CSS</td><td>Rapid UI development, design-system-driven teams</td><td>Vercel, GitHub</td></tr>
+            <tr><td>D3.js</td><td>Data Visualization</td><td>Low-level library for binding data to SVG/canvas and creating custom charts</td><td>Complex, custom data visualizations — analytics dashboards, research tools</td><td>NYT, Bloomberg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INFRASTRUCTURE -->
+    <div class="techref-pane" id="tech-infra" role="tabpanel">
+      <div class="techref-intro">Infrastructure covers how software is hosted, scaled, secured, and observed. Key domains: <strong>cloud platforms, containers, IaC, CI/CD, observability</strong>. The shift from on-prem to cloud-native is the defining infrastructure change of the past decade.</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Technology</th><th>Category</th><th>Definition</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>AWS</td><td>Cloud Platform</td><td>Amazon's cloud — broadest service catalog, dominant market leader</td><td>General-purpose cloud, startups, enterprise, regulated workloads</td></tr>
+            <tr><td>Azure</td><td>Cloud Platform</td><td>Microsoft's cloud — deep enterprise integration, Active Directory, .NET ecosystem</td><td>Enterprise with M365/Teams, .NET shops, hybrid cloud</td></tr>
+            <tr><td>GCP</td><td>Cloud Platform</td><td>Google's cloud — strongest in AI/ML, BigQuery analytics, Kubernetes origin</td><td>AI/ML workloads, data analytics, Kubernetes-native workloads</td></tr>
+            <tr><td>Docker</td><td>Containerization</td><td>Standard for building, packaging, and running containerized applications</td><td>Consistent environments, microservice packaging, local dev</td></tr>
+            <tr><td>Kubernetes (K8s)</td><td>Container Orchestration</td><td>Platform for deploying, scaling, and managing containerized workloads</td><td>Production microservice deployments, auto-scaling, rolling updates</td></tr>
+            <tr><td>Terraform</td><td>IaC (Infrastructure as Code)</td><td>Declarative tool for provisioning cloud infrastructure via code</td><td>Cloud resource provisioning, multi-cloud, repeatable environments</td></tr>
+            <tr><td>GitHub Actions</td><td>CI/CD</td><td>Native CI/CD integrated with GitHub repositories — YAML-based pipelines</td><td>Code-driven build, test, deploy automation</td></tr>
+            <tr><td>Jenkins</td><td>CI/CD</td><td>Open-source automation server with extensive plugin ecosystem</td><td>Custom, complex pipelines; regulated environments needing on-prem</td></tr>
+            <tr><td>OpenTelemetry</td><td>Observability</td><td>Open standard for collecting traces, metrics, and logs from any system</td><td>Vendor-neutral telemetry collection across distributed systems</td></tr>
+            <tr><td>Grafana</td><td>Observability</td><td>Dashboards and alerting for metrics, logs, and traces</td><td>Real-time monitoring, SLO dashboards, incident response</td></tr>
+            <tr><td>DataDog</td><td>Observability (SaaS)</td><td>Full-stack monitoring platform — APM, logs, infrastructure, security</td><td>Managed observability for cloud-native apps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ALM TOOLSETS -->
+    <div class="techref-pane" id="tech-alm" role="tabpanel">
+      <div class="techref-intro">Application Lifecycle Management (ALM) tools cover the full software delivery lifecycle — from planning and tracking through testing, deployment, and compliance evidence capture.</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Tool</th><th>Category</th><th>Definition</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>Jira</td><td>Project / Issue Tracking</td><td>Atlassian's project and issue tracker — industry standard for agile teams</td><td>Agile delivery, sprint planning, bug tracking, epics and roadmaps</td></tr>
+            <tr><td>GitHub</td><td>Version Control + Dev Platform</td><td>Code hosting, pull requests, Actions CI/CD, GitHub Projects</td><td>Source control, code review, developer workflow, open source</td></tr>
+            <tr><td>GitLab</td><td>DevOps Platform</td><td>End-to-end DevOps platform — source control, CI/CD, security scanning, compliance</td><td>Self-hosted DevOps, regulated environments, all-in-one platform</td></tr>
+            <tr><td>Confluence</td><td>Knowledge Management</td><td>Atlassian's wiki for team documentation, runbooks, and decisions</td><td>Engineering documentation, ADRs, process guides, playbooks</td></tr>
+            <tr><td>ServiceNow</td><td>ITSM / ITOM</td><td>Enterprise service management platform — incidents, changes, governance</td><td>Regulated environments, change management, ITSM at scale</td></tr>
+            <tr><td>Veeva</td><td>QMS (Pharma / MedDevice)</td><td>Cloud-based Quality Management System built for life sciences compliance</td><td>FDA-regulated environments, clinical documentation, SOPs, CAPA</td></tr>
+            <tr><td>TestRail</td><td>Test Management</td><td>Test case management and reporting tool</td><td>QA teams tracking manual and automated test coverage and results</td></tr>
+            <tr><td>SonarQube</td><td>Code Quality</td><td>Static code analysis — security, maintainability, technical debt tracking</td><td>Continuous code quality gates in CI/CD pipelines</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="techref-pane" id="tech-arch" role="tabpanel">
+      <div class="techref-intro">Architecture patterns define how systems are structured and how components interact. Every engineering leader needs fluency in <strong>microservices, event-driven, API-first, and cloud-native</strong> patterns — and when to use monoliths vs distributed systems.</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Pattern / Style</th><th>Definition</th><th>Key Benefits</th><th>Watch-Outs</th></tr></thead>
+          <tbody>
+            <tr><td>Microservices</td><td>Application built as a suite of small, independently deployable services</td><td>Independent scaling, team autonomy, technology flexibility</td><td>Operational complexity, distributed tracing, network latency</td></tr>
+            <tr><td>Monolith</td><td>Single deployable unit — all modules in one codebase</td><td>Simpler dev/test, no network calls, easier initial delivery</td><td>Scaling bottlenecks, deployment risk, coupling between modules</td></tr>
+            <tr><td>Event-Driven Architecture</td><td>Components communicate via events (asynchronous messages), not direct calls</td><td>Decoupling, resilience, real-time processing, audit trail</td><td>Eventual consistency, debugging complexity, dead-letter handling</td></tr>
+            <tr><td>API-First</td><td>Every capability exposed as a well-defined API before implementation begins</td><td>Reusability, composability, enables partner ecosystems</td><td>Requires upfront contract discipline; versioning overhead</td></tr>
+            <tr><td>CQRS</td><td>Command Query Responsibility Segregation — separate read and write models</td><td>Optimized read performance, scales reads independently, clear audit trail</td><td>Eventual consistency, added code complexity</td></tr>
+            <tr><td>Serverless</td><td>Run code without managing servers — function-level billing and scale</td><td>Zero ops overhead, cost-efficient for bursty workloads, rapid deployment</td><td>Cold starts, vendor lock-in, debugging complexity</td></tr>
+            <tr><td>Domain-Driven Design (DDD)</td><td>Align software design with business domain — bounded contexts, aggregates, ubiquitous language</td><td>Reduces complexity, aligns engineering with business language and models</td><td>Steep learning curve, requires deep domain collaboration</td></tr>
+            <tr><td>Service Mesh</td><td>Infrastructure layer for service-to-service communication — traffic management, security, observability</td><td>mTLS, traffic shaping, circuit breakers, observability without app changes</td><td>Operational complexity, latency overhead (sidecar proxy)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">Architecture Decision Framework: Monolith vs Microservices</div>
+      <div class="techref-grid">
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Start with a Monolith when...</span><h4>Early-stage or unclear domain</h4><p>Team is small, domain boundaries not established, speed to market is critical, and operational complexity is a burden you can't yet afford.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">Move to Microservices when...</span><h4>Scale and team autonomy demand it</h4><p>You have clear bounded contexts, teams own distinct domains, you're hitting scaling bottlenecks, and you have the platform maturity (K8s, observability, CI/CD) to support distributed systems.</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#15803d">Strangler Fig Pattern</span><h4>Migrate gradually</h4><p>Wrap the legacy monolith with new microservices at the boundary. Redirect traffic incrementally. The monolith "strangled" over time. Reduces risk of big-bang rewrites.</p></div>
+      </div>
+    </div>
+
+    <!-- ORG MATURITY -->
+    <div class="techref-pane" id="tech-maturity" role="tabpanel">
+      <div class="techref-intro">Engineering maturity frameworks help leaders assess where their organization is today and define a clear path to improve. The most important metrics for delivery maturity are <strong>DORA metrics</strong>. Use the maturity model to drive roadmap conversations, not just assessments.</div>
+      <div class="techref-group-h">DORA Metrics — The Standard for Delivery Maturity</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Metric</th><th>Definition</th><th>Elite</th><th>High</th><th>Medium</th><th>Low</th></tr></thead>
+          <tbody>
+            <tr><td>Deployment Frequency</td><td>How often code is deployed to production</td><td>Multiple/day</td><td>Daily–weekly</td><td>Weekly–monthly</td><td>Monthly or less</td></tr>
+            <tr><td>Lead Time for Changes</td><td>Commit to production deployment time</td><td>&lt; 1 hour</td><td>1 day–1 week</td><td>1–4 weeks</td><td>&gt; 6 months</td></tr>
+            <tr><td>Change Failure Rate</td><td>% of deployments causing production failure</td><td>0–5%</td><td>5–10%</td><td>10–15%</td><td>&gt; 15%</td></tr>
+            <tr><td>Mean Time to Restore (MTTR)</td><td>Time to recover from a production failure</td><td>&lt; 1 hour</td><td>&lt; 1 day</td><td>1 day–1 week</td><td>&gt; 6 months</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">DevSecOps Maturity Model</div>
+      <table class="maturity-table">
+        <thead><tr><th>Level</th><th>Security Posture</th><th>Compliance Posture</th><th>Delivery Speed</th><th>Governance</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="str-pill ml1">Level 1 · Reactive</span></td>
+            <td>Security is manual, post-deployment. Vulnerabilities discovered in production.</td>
+            <td>Compliance review happens at release time. Audit prep is manual and time-consuming.</td>
+            <td>Slow. Security and compliance reviews are bottlenecks.</td>
+            <td>Ad hoc. No governance structure. Decisions made informally.</td>
+          </tr>
+          <tr>
+            <td><span class="str-pill ml3">Level 3 · Proactive</span></td>
+            <td>SAST/DAST in CI/CD. Dependency scanning automated. Threat modeling in design phase.</td>
+            <td>Policy-as-code in pipelines. Evidence captured automatically. Audit readiness continuous.</td>
+            <td>Moderate. Automation removes most manual gates. Speed improving.</td>
+            <td>Governance council exists. Release governance standardized. OKRs tracked.</td>
+          </tr>
+          <tr>
+            <td><span class="str-pill ml5">Level 5 · Predictive</span></td>
+            <td>Zero-trust architecture. AI-powered threat detection. Security embedded at design, not code.</td>
+            <td>Continuous compliance. Zero findings. 100% automated evidence. AI-powered audit readiness.</td>
+            <td>Fast. Elite DORA metrics. Compliance accelerates speed rather than impeding it.</td>
+            <td>SDLC Council with executive alignment. OKRs cascade to all teams. Metrics drive decisions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AI / MLOPS -->
+    <div class="techref-pane" id="tech-mlops" role="tabpanel">
+      <div class="techref-intro">AI and ML operations (MLOps) is the set of practices and tools for building, deploying, monitoring, and governing machine learning models and GenAI applications in production. Key distinction: <strong>Traditional ML Stack vs GenAI / LLM Stack</strong>.</div>
+      <div class="techref-group-h">AI / MLOps Tool Landscape</div>
+      <div class="techref-table-wrap">
+        <table class="techref-table">
+          <thead><tr><th>Category</th><th>Purpose</th><th>When to Use</th><th>Leading Tools</th></tr></thead>
+          <tbody>
+            <tr><td>LLM Providers</td><td>Foundation models accessed via API for generation, classification, and reasoning</td><td>Any GenAI application — copilots, assistants, classification, summarization</td><td>OpenAI, Anthropic (Claude), Google Gemini, Cohere</td></tr>
+            <tr><td>Experiment Tracking</td><td>Track model training runs, hyperparameters, and metrics to compare and reproduce results</td><td>When team needs reproducibility and model comparison</td><td>MLflow, Weights &amp; Biases, Comet ML</td></tr>
+            <tr><td>Model Registry</td><td>Catalog versioned models by stage: dev → validated → production</td><td>Governance, version control, and controlled promotion matter</td><td>MLflow Registry, SageMaker Registry, Vertex AI Registry</td></tr>
+            <tr><td>Model Serving</td><td>Deploy models as API endpoints or batch jobs that apps can consume</td><td>Models must be consumed by apps or workflows in real-time</td><td>TorchServe, Triton, BentoML, SageMaker Endpoints, Vertex Endpoints</td></tr>
+            <tr><td>Pipeline Orchestration</td><td>Automate retraining and deployment workflows in repeatable DAGs</td><td>Retraining and deployment must be automated and repeatable</td><td>Airflow, Kubeflow, Vertex Pipelines, SageMaker Pipelines</td></tr>
+            <tr><td>Model Monitoring</td><td>Track accuracy, data drift, feature drift, latency, and bias in production</td><td>Production models that may drift or degrade over time</td><td>Arize AI, Evidently, WhyLabs, Fiddler</td></tr>
+            <tr><td>LLMOps Tools</td><td>Manage LLM prompts, RAG pipelines, evaluations, and tracing</td><td>Building GenAI assistants, copilots, or RAG systems</td><td>LangSmith, Helicone, Weights &amp; Biases, PromptLayer</td></tr>
+            <tr><td>Vector Databases</td><td>Store embeddings for semantic / meaning-based retrieval</td><td>RAG, semantic search, LLM memory</td><td>Pinecone, Weaviate, pgvector, Milvus</td></tr>
+            <tr><td>RAG Frameworks</td><td>Build LLM-based applications with retrieval and chaining</td><td>Retrieval augmented generation, agents</td><td>LangChain, LlamaIndex</td></tr>
+            <tr><td>Guardrails / Safety</td><td>Enforce AI behavior and policy controls — PII filtering, content safety</td><td>Enterprise, regulated, or customer-facing AI</td><td>Guardrails AI, NeMo Guardrails</td></tr>
+            <tr><td>Model Evaluation</td><td>Benchmark model quality with offline evals and test suites</td><td>Validation, regression testing, quality gates</td><td>Evidently, DeepEval, Ragas</td></tr>
+            <tr><td>Governance / Responsible AI</td><td>Track risk, lineage, fairness, and approvals for AI systems</td><td>Auditability, compliance, regulated AI deployment</td><td>Azure Responsible AI, Model Cards, lineage tools</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="techref-group-h">Three Stack Archetypes</div>
+      <div class="techref-grid">
+        <div class="techref-card"><span class="tech-tag" style="background:#dbeafe;color:#1d4ed8">Traditional ML Stack</span><h4>Prediction · Classification · Regression</h4><p>Notebooks → Feature engineering → Training platforms → Experiment tracking → Model registry → Serving endpoint → Monitoring dashboard<br><br><strong>Tools:</strong> Python, Pandas, Spark, MLflow, Airflow, SageMaker, Arize</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#f3e8ff;color:#7c3aed">GenAI / LLM Stack</span><h4>Copilots · Assistants · RAG · Agents</h4><p>Source documents → Embedding model → Vector DB → Prompt framework → LLM provider → Eval &amp; tracing → Guardrails → Monitoring<br><br><strong>Tools:</strong> OpenAI/Anthropic, LangChain, Pinecone, LangSmith, Ragas, DeepEval</p></div>
+        <div class="techref-card"><span class="tech-tag" style="background:#dcfce7;color:#15803d">Enterprise Regulated AI Stack</span><h4>Governance · Compliance · Auditability</h4><p>Controlled data → Governed pipelines → Experiment evidence → Approval workflow → Registry/versioning → Controlled deployment → Monitoring + audit trail<br><br><strong>Additions:</strong> Traceability, model cards, bias review, validation gates, audit logs</p></div>
+      </div>
+    </div>
+
+  </div><!-- end techref-body -->
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer role="contentinfo">
+  <p>Engineering Leadership Framework &nbsp;·&nbsp; Built for executive clarity &nbsp;·&nbsp; Manager → CTO &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+/* ─── MOBILE NAV ─── */
+function toggleMobileMenu() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileNav').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.topnav') && !e.target.closest('#mobileNav')) {
+    closeMobileMenu();
+  }
+});
+
+/* ─── ACTIVE NAV HIGHLIGHTING ─── */
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section[id]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const match = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (match) match.classList.add('active');
+    }
+  });
+}, { rootMargin: '-60px 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+
+/* ─── LEADERSHIP TREE ─── */
+function toggleNode(level, btn) {
+  const panel = document.getElementById('panel-' + level);
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tree-node-btn').forEach(b => {
+    b.classList.remove('open');
+    b.setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+  }
+}
+
+function switchTab(level, pane, btn) {
+  const panel = document.getElementById('panel-' + level);
+  panel.querySelectorAll('.panel-tab').forEach(t => {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+  });
+  panel.querySelectorAll('.panel-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  document.getElementById(level + '-' + pane).classList.add('active');
+}
+
+/* ─── INTERVIEW TRACK ─── */
+function switchInterview(track, btn) {
+  document.querySelectorAll('.interview-track-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.interview-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('interview-' + track).classList.add('active');
+}
+
+/* ─── Q ACCORDION ─── */
+function toggleQ(block) {
+  const isOpen = block.classList.contains('open');
+  // Close all in this pane
+  const pane = block.closest('.interview-pane, .expmap-pane');
+  if (pane) {
+    pane.querySelectorAll('.q-block').forEach(b => b.classList.remove('open'));
+  }
+  if (!isOpen) {
+    block.classList.add('open');
+  }
+}
+// Allow click on q-block child elements
+document.addEventListener('click', function(e) {
+  const block = e.target.closest('.q-block');
+  if (block && !e.target.closest('.q-answer')) {
+    toggleQ(block);
+  }
+});
+// Remove the inline onclick from q-blocks after load (handled via delegation)
+document.querySelectorAll('.q-block').forEach(b => b.removeAttribute('onclick'));
+
+/* ─── EXPERIENCE MAP TRACK ─── */
+function switchExpMap(track, btn) {
+  document.querySelectorAll('.expmap-track-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.expmap-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('expmap-' + track).classList.add('active');
+}
+
+/* ─── TECH REFERENCE ─── */
+function switchTech(tab, btn) {
+  document.querySelectorAll('.techref-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.techref-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tech-' + tab).classList.add('active');
+}
+</script>
+</div><!-- end page-shell -->
+</body>
+</html>
